@@ -1460,6 +1460,30 @@ button {
   text-align: center;
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.admin-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  opacity: 0.5;
+  transition: var(--transition-base);
+}
+
+.admin-btn:hover {
+  opacity: 1;
+  color: var(--color-gold);
+}
+
+.admin-btn svg {
+  display: block;
 }
 
 /* ===== Mobile Navigation ===== */
