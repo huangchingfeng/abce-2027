@@ -17,7 +17,9 @@
  */
 
 // ===== Gemini AI 設定 =====
-const GEMINI_API_KEY = 'AIzaSyBRlKNGQwN4sdaQjaddar6qN8ucIl8FDa0';
+// 安全做法：從 Script Properties 讀取 API Key（不會外洩到 GitHub）
+// 設定方式：Apps Script → 專案設定 → 指令碼屬性 → 新增 GEMINI_API_KEY
+const GEMINI_API_KEY = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY') || '';
 const GEMINI_MODEL = 'gemini-1.5-flash';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
@@ -85,6 +87,7 @@ function doGet(e) {
           resourceNeeded: e.parameter.resourceNeeded ? e.parameter.resourceNeeded.split(',') : [],
           resourceDetails: e.parameter.resourceDetails ? JSON.parse(decodeURIComponent(e.parameter.resourceDetails)) : {},
           targetIndustries: e.parameter.targetIndustries ? e.parameter.targetIndustries.split(',') : [],
+          industryDetails: e.parameter.industryDetails ? JSON.parse(decodeURIComponent(e.parameter.industryDetails)) : {},
           freeDescription: e.parameter.freeDescription || ''
         };
         result = analyzeMatchmakingWithAI(userData);
@@ -411,14 +414,14 @@ function generateAIResponse(userData, resourceDB) {
   const resourceNeeded = userData.resourceNeeded || [];
   const resourceDetails = userData.resourceDetails || {};
   const targetIndustries = userData.targetIndustries || [];
+  const industryDetails = userData.industryDetails || {};
   const freeDescription = userData.freeDescription || '';
 
   // 產業代碼對應中文
   const industryMap = {
     'FOOD': '餐飲服務', 'TECH': '科技資訊', 'FINANCE': '金融保險',
-    'MANUFACTURE': '製造業', 'CONSTRUCTION': '建築營造', 'HEALTH': '醫療健康',
-    'EDUCATION': '教育培訓', 'LEGAL': '法律會計', 'MARKETING': '行銷廣告',
-    'LOGISTICS': '物流運輸', 'TRADE': '零售貿易', 'REALESTATE': '不動產'
+    'MANUFACTURING': '製造業', 'MEDICAL': '醫療健康', 'RETAIL': '零售批發',
+    'PROFESSIONAL': '專業服務', 'OTHER': '其他'
   };
 
   // 資源代碼對應中文
@@ -438,7 +441,11 @@ function generateAIResponse(userData, resourceDB) {
     userNeedsText += `需要的資源：${needsList.join('、')}\n`;
   }
   if (targetIndustries.length > 0) {
-    const industryList = targetIndustries.map(i => industryMap[i] || i);
+    const industryList = targetIndustries.map(i => {
+      const name = industryMap[i] || i;
+      const detail = industryDetails[i] || '';
+      return detail ? `${name}（${detail}）` : name;
+    });
     userNeedsText += `想媒合的產業：${industryList.join('、')}\n`;
   }
   if (freeDescription) {

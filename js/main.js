@@ -77,6 +77,7 @@ async function getAIMatchmakingAnalysis(userData) {
     resourceNeeded: (userData.resourceNeeded || []).join(','),
     resourceDetails: encodeURIComponent(JSON.stringify(userData.resourceDetails || {})),
     targetIndustries: (userData.targetIndustries || []).join(','),
+    industryDetails: encodeURIComponent(JSON.stringify(userData.industryDetails || {})),
     freeDescription: userData.freeDescription || ''
   });
 
@@ -321,6 +322,22 @@ function initForms() {
       }
     });
   });
+
+  // Handle industry checkbox toggle for detail inputs
+  const industryCheckboxes = document.querySelectorAll('#industryCheckboxes input[type="checkbox"]');
+  industryCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const detailInput = checkbox.closest('.resource-option-item').querySelector('.industry-detail-input');
+      if (detailInput) {
+        detailInput.style.display = checkbox.checked ? 'block' : 'none';
+        if (checkbox.checked) {
+          detailInput.focus();
+        } else {
+          detailInput.value = ''; // 取消勾選時清空輸入
+        }
+      }
+    });
+  });
 }
 
 async function handleMatchmakingSubmit(e) {
@@ -340,6 +357,15 @@ async function handleMatchmakingSubmit(e) {
     const detail = formData.get(`resourceDetail_${resource}`) || '';
     if (detail.trim()) {
       resourceDetails[resource] = detail.trim();
+    }
+  });
+
+  // 收集每個產業的詳細說明
+  const industryDetails = {};
+  targetIndustries.forEach(industry => {
+    const detail = formData.get(`industryDetail_${industry}`) || '';
+    if (detail.trim()) {
+      industryDetails[industry] = detail.trim();
     }
   });
 
@@ -364,6 +390,7 @@ async function handleMatchmakingSubmit(e) {
     resourceNeeded: resourceNeeded,
     resourceDetails: resourceDetails,
     targetIndustries: targetIndustries,
+    industryDetails: industryDetails,
     freeDescription: freeDescription,
     language: window.i18n.getCurrentLang(),
     submittedAt: new Date().toISOString()
@@ -399,6 +426,10 @@ async function handleMatchmakingSubmit(e) {
   form.reset();
   // 隱藏所有資源詳細說明輸入框
   document.querySelectorAll('.resource-detail-input').forEach(input => {
+    input.style.display = 'none';
+  });
+  // 隱藏所有產業詳細說明輸入框
+  document.querySelectorAll('.industry-detail-input').forEach(input => {
     input.style.display = 'none';
   });
 }

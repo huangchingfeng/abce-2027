@@ -39,6 +39,12 @@
         <button class="lang-btn" data-lang="ja">日本語</button>
         <button class="lang-btn" data-lang="ko">한국어</button>
       </div>
+      <button class="admin-btn" id="adminBtn" title="管理員登入">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
       <button class="mobile-menu-btn" aria-label="Menu">
         <span></span>
         <span></span>
@@ -331,40 +337,64 @@
           </div>
 
           <div class="form-group">
-            <label data-i18n="form.targetIndustries">想媒合的產業（可複選）</label>
-            <div class="checkbox-grid checkbox-grid-simple">
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="FOOD">
-                <span data-i18n="industry.food">餐飲食品</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="TECH">
-                <span data-i18n="industry.tech">科技資訊</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="FINANCE">
-                <span data-i18n="industry.finance">金融保險</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="MEDICAL">
-                <span data-i18n="industry.medical">醫療健康</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="RETAIL">
-                <span data-i18n="industry.retail">零售批發</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="PROFESSIONAL">
-                <span data-i18n="industry.professional">專業服務</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="MANUFACTURING">
-                <span data-i18n="industry.manufacturing">製造/工程</span>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" name="targetIndustries" value="OTHER">
-                <span data-i18n="industry.other">其他</span>
-              </label>
+            <label data-i18n="form.targetIndustries">想媒合的產業（可複選，勾選後可補充說明）</label>
+            <div class="resource-options" id="industryCheckboxes">
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="FOOD" data-industry="food">
+                  <span data-i18n="industry.food">餐飲食品</span>
+                </label>
+                <input type="text" name="industryDetail_FOOD" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.food.placeholder" placeholder="例如：咖啡豆供應商、餐廳設備、食材進口商..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="TECH" data-industry="tech">
+                  <span data-i18n="industry.tech">科技資訊</span>
+                </label>
+                <input type="text" name="industryDetail_TECH" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.tech.placeholder" placeholder="例如：軟體開發、AI 解決方案、雲端服務..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="FINANCE" data-industry="finance">
+                  <span data-i18n="industry.finance">金融保險</span>
+                </label>
+                <input type="text" name="industryDetail_FINANCE" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.finance.placeholder" placeholder="例如：企業貸款、商業保險、財務顧問..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="MEDICAL" data-industry="medical">
+                  <span data-i18n="industry.medical">醫療健康</span>
+                </label>
+                <input type="text" name="industryDetail_MEDICAL" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.medical.placeholder" placeholder="例如：醫療器材、健康食品、長照服務..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="RETAIL" data-industry="retail">
+                  <span data-i18n="industry.retail">零售批發</span>
+                </label>
+                <input type="text" name="industryDetail_RETAIL" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.retail.placeholder" placeholder="例如：電商平台、實體通路、批發商..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="PROFESSIONAL" data-industry="professional">
+                  <span data-i18n="industry.professional">專業服務</span>
+                </label>
+                <input type="text" name="industryDetail_PROFESSIONAL" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.professional.placeholder" placeholder="例如：法律顧問、會計師、人資顧問..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="MANUFACTURING" data-industry="manufacturing">
+                  <span data-i18n="industry.manufacturing">製造/工程</span>
+                </label>
+                <input type="text" name="industryDetail_MANUFACTURING" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.manufacturing.placeholder" placeholder="例如：OEM代工、模具製造、工程承包..." style="display: none;">
+              </div>
+              <div class="resource-option-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="targetIndustries" value="OTHER" data-industry="other">
+                  <span data-i18n="industry.other">其他</span>
+                </label>
+                <input type="text" name="industryDetail_OTHER" class="resource-detail-input industry-detail-input" data-i18n-placeholder="industry.other.placeholder" placeholder="請說明您想媒合的產業類型..." style="display: none;">
+              </div>
             </div>
           </div>
 
@@ -618,16 +648,28 @@
 
       <div class="gallery-grid">
         <div class="gallery-item fade-in">
-          <span class="gallery-placeholder">Photo 1</span>
+          <img src="images/gallery-1.jpg" alt="活動花絮 1" loading="lazy">
         </div>
         <div class="gallery-item fade-in fade-in-delay-1">
-          <span class="gallery-placeholder">Photo 2</span>
+          <img src="images/gallery-2.jpg" alt="活動花絮 2" loading="lazy">
         </div>
         <div class="gallery-item fade-in fade-in-delay-2">
-          <span class="gallery-placeholder">Photo 3</span>
+          <img src="images/gallery-3.jpg" alt="活動花絮 3" loading="lazy">
         </div>
         <div class="gallery-item fade-in fade-in-delay-3">
-          <span class="gallery-placeholder">Photo 4</span>
+          <img src="images/gallery-4.jpg" alt="活動花絮 4" loading="lazy">
+        </div>
+        <div class="gallery-item fade-in">
+          <img src="images/gallery-5.jpg" alt="活動花絮 5" loading="lazy">
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-1">
+          <img src="images/gallery-6.jpg" alt="活動花絮 6" loading="lazy">
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-2">
+          <img src="images/gallery-7.jpg" alt="活動花絮 7" loading="lazy">
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-3">
+          <img src="images/gallery-8.jpg" alt="活動花絮 8" loading="lazy">
         </div>
       </div>
     </div>
@@ -710,14 +752,10 @@
   </footer>
 
   <script>
-    function openAdmin() {
-      const password = prompt('請輸入管理員密碼：');
-      if (password === 'ABCE') {
-        window.location.href = 'admin.html';
-      } else if (password !== null) {
-        alert('密碼錯誤');
-      }
-    }
+    // 右上角管理員按鈕 - 直接跳轉到 admin.html（由 admin.html 處理登入）
+    document.getElementById('adminBtn').addEventListener('click', function() {
+      window.location.href = 'admin.html';
+    });
   </script>
 
   <!-- Scripts -->

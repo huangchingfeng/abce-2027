@@ -85,6 +85,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      text-decoration: none;
     }
 
     .btn-primary {
@@ -568,6 +569,13 @@
       <span>後台管理系統</span>
     </div>
     <div class="header-actions">
+      <a href="index.html" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        回首頁
+      </a>
       <button class="btn btn-secondary" onclick="refreshData()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
@@ -702,16 +710,18 @@
     // Configuration
     const CONFIG_KEY = 'abce_admin_api_url';
     const AUTH_KEY = 'abce_admin_auth';
-    const ADMIN_PASSWORD = 'ABCE';
-    let API_URL = localStorage.getItem(CONFIG_KEY) || '';
+    const ADMIN_PASSWORD = 'abce';
+    // 內建 API URL（已部署的 Google Apps Script）
+    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwNQN3D0vvnluWDIxsUXUssRV2p12FiVnoP_4hYEABS711V6jj_DE5xhDQ9DA59oQ6N/exec';
+    let API_URL = localStorage.getItem(CONFIG_KEY) || DEFAULT_API_URL;
     let allData = [];
 
-    // Password Check
+    // Password Check (case insensitive)
     function checkPassword() {
       const input = document.getElementById('passwordInput');
       const error = document.getElementById('loginError');
 
-      if (input.value === ADMIN_PASSWORD) {
+      if (input.value.toLowerCase() === ADMIN_PASSWORD) {
         sessionStorage.setItem(AUTH_KEY, 'true');
         showAdminPanel();
       } else {
@@ -729,6 +739,8 @@
 
       if (API_URL) {
         document.getElementById('apiUrlInput').value = API_URL;
+        // 如果已有 API URL，隱藏設定指南並直接載入資料
+        document.getElementById('setupGuide').style.display = 'none';
         loadData();
       }
     }

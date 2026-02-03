@@ -106,12 +106,18 @@ const translations = {
 
     // Industries
     'industry.food': '餐飲食品',
+    'industry.food.placeholder': '例如：咖啡豆供應商、餐廳設備、食材進口商...',
     'industry.tech': '科技資訊',
+    'industry.tech.placeholder': '例如：軟體開發、AI 解決方案、雲端服務...',
     'industry.manufacturing': '製造業',
+    'industry.manufacturing.placeholder': '例如：OEM代工、模具製造、工程承包...',
     'industry.finance': '金融保險',
+    'industry.finance.placeholder': '例如：企業貸款、商業保險、財務顧問...',
     'industry.realEstate': '房地產',
     'industry.retail': '零售批發',
+    'industry.retail.placeholder': '例如：電商平台、實體通路、批發商...',
     'industry.medical': '醫療健康',
+    'industry.medical.placeholder': '例如：醫療器材、健康食品、長照服務...',
     'industry.education': '教育培訓',
     'industry.marketing': '行銷廣告',
     'industry.logistics': '物流運輸',
@@ -120,7 +126,9 @@ const translations = {
     'industry.construction': '建築工程',
     'industry.beauty': '美容美髮',
     'industry.professional': '專業服務',
+    'industry.professional.placeholder': '例如：法律顧問、會計師、人資顧問...',
     'industry.other': '其他',
+    'industry.other.placeholder': '請說明您想媒合的產業類型...',
 
     // Result
     'result.title': '感謝您的填寫！',
@@ -251,12 +259,18 @@ const translations = {
 
     // Industries
     'industry.food': 'Food & Beverage',
+    'industry.food.placeholder': 'e.g., coffee bean supplier, restaurant equipment, food importer...',
     'industry.tech': 'Technology',
+    'industry.tech.placeholder': 'e.g., software development, AI solutions, cloud services...',
     'industry.manufacturing': 'Manufacturing',
+    'industry.manufacturing.placeholder': 'e.g., OEM production, mold manufacturing, engineering contractor...',
     'industry.finance': 'Finance & Insurance',
+    'industry.finance.placeholder': 'e.g., business loans, commercial insurance, financial advisor...',
     'industry.realEstate': 'Real Estate',
     'industry.retail': 'Retail & Wholesale',
+    'industry.retail.placeholder': 'e.g., e-commerce platform, retail channels, wholesalers...',
     'industry.medical': 'Healthcare',
+    'industry.medical.placeholder': 'e.g., medical equipment, health products, elderly care services...',
     'industry.education': 'Education',
     'industry.marketing': 'Marketing & Advertising',
     'industry.logistics': 'Logistics',
@@ -265,7 +279,9 @@ const translations = {
     'industry.construction': 'Construction & Engineering',
     'industry.beauty': 'Beauty & Wellness',
     'industry.professional': 'Professional Services',
+    'industry.professional.placeholder': 'e.g., legal counsel, accountant, HR consultant...',
     'industry.other': 'Other',
+    'industry.other.placeholder': 'Please describe the industry you want to match with...',
 
     // Result
     'result.title': 'Thank You!',
@@ -396,12 +412,18 @@ const translations = {
 
     // Industries
     'industry.food': '飲食サービス',
+    'industry.food.placeholder': '例：コーヒー豆サプライヤー、レストラン設備、食材輸入業者...',
     'industry.tech': 'テクノロジー',
+    'industry.tech.placeholder': '例：ソフトウェア開発、AIソリューション、クラウドサービス...',
     'industry.manufacturing': '製造業',
+    'industry.manufacturing.placeholder': '例：OEM生産、金型製造、エンジニアリング...',
     'industry.finance': '金融・保険',
+    'industry.finance.placeholder': '例：法人融資、ビジネス保険、財務アドバイザー...',
     'industry.realEstate': '不動産',
     'industry.retail': '小売・卸売',
+    'industry.retail.placeholder': '例：ECプラットフォーム、小売チャネル、卸売業者...',
     'industry.medical': '医療・ヘルスケア',
+    'industry.medical.placeholder': '例：医療機器、健康食品、介護サービス...',
     'industry.education': '教育',
     'industry.marketing': 'マーケティング・広告',
     'industry.logistics': '物流',
@@ -410,7 +432,9 @@ const translations = {
     'industry.construction': '建設・エンジニアリング',
     'industry.beauty': '美容・ウェルネス',
     'industry.professional': 'プロフェッショナルサービス',
+    'industry.professional.placeholder': '例：法務顧問、公認会計士、人事コンサルタント...',
     'industry.other': 'その他',
+    'industry.other.placeholder': 'マッチングを希望する業種をご記入ください...',
 
     // Result
     'result.title': 'ありがとうございます！',
@@ -541,12 +565,18 @@ const translations = {
 
     // Industries
     'industry.food': '식음료',
+    'industry.food.placeholder': '예: 커피 원두 공급업체, 레스토랑 장비, 식자재 수입업체...',
     'industry.tech': '기술',
+    'industry.tech.placeholder': '예: 소프트웨어 개발, AI 솔루션, 클라우드 서비스...',
     'industry.manufacturing': '제조업',
+    'industry.manufacturing.placeholder': '예: OEM 생산, 금형 제조, 엔지니어링 계약...',
     'industry.finance': '금융/보험',
+    'industry.finance.placeholder': '예: 기업 대출, 사업 보험, 재무 고문...',
     'industry.realEstate': '부동산',
     'industry.retail': '소매/도매',
+    'industry.retail.placeholder': '예: 이커머스 플랫폼, 소매 채널, 도매업체...',
     'industry.medical': '의료/헬스케어',
+    'industry.medical.placeholder': '예: 의료 기기, 건강 식품, 요양 서비스...',
     'industry.education': '교육',
     'industry.marketing': '마케팅/광고',
     'industry.logistics': '물류',
@@ -555,7 +585,9 @@ const translations = {
     'industry.construction': '건설/엔지니어링',
     'industry.beauty': '뷰티/웰니스',
     'industry.professional': '전문 서비스',
+    'industry.professional.placeholder': '예: 법률 고문, 공인 회계사, HR 컨설턴트...',
     'industry.other': '기타',
+    'industry.other.placeholder': '매칭 희망 산업을 기재해 주세요...',
 
     // Result
     'result.title': '감사합니다!',
