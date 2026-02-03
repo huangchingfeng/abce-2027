@@ -274,7 +274,7 @@
           </div>
 
           <div class="form-group">
-            <label data-i18n="form.resourceNeeded">需要的資源 <span class="required">*</span></label>
+            <label data-i18n="form.resourceNeeded">需要的資源</label>
             <div class="resource-input-wrapper">
               <div class="checkbox-grid checkbox-grid-simple" id="resourceCheckboxes">
                 <label class="checkbox-label">
@@ -311,7 +311,7 @@
           </div>
 
           <div class="form-group">
-            <label data-i18n="form.targetIndustries">想媒合的產業（可複選）<span class="required">*</span></label>
+            <label data-i18n="form.targetIndustries">想媒合的產業（可複選）</label>
             <div class="checkbox-grid checkbox-grid-simple">
               <label class="checkbox-label">
                 <input type="checkbox" name="targetIndustries" value="FOOD">
@@ -347,6 +347,13 @@
               </label>
             </div>
           </div>
+
+          <div class="form-group">
+            <label for="mm-freetext" data-i18n="form.freeDescription">或直接描述您的需求</label>
+            <textarea id="mm-freetext" name="freeDescription" rows="3" placeholder="例如：我想找台北的咖啡豆供應商、我需要會日文的業務人才..."></textarea>
+          </div>
+
+          <p class="form-hint" data-i18n="form.requirementHint">* 以上三項（需要的資源、想媒合的產業、自由描述）至少填寫一項</p>
 
           <button type="submit" class="btn btn-primary btn-lg btn-full" data-i18n="form.submitMatchmaking">
             送出媒合需求

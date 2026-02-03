@@ -1018,6 +1018,17 @@ button {
   margin-top: var(--space-2);
 }
 
+/* Form Hint */
+.form-hint {
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  margin: var(--space-4) 0;
+  padding: var(--space-3);
+  background: rgba(201, 162, 39, 0.1);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-gold);
+}
+
 /* Checkbox & Radio */
 .checkbox-grid {
   display: grid;

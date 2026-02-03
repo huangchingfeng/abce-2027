@@ -235,18 +235,17 @@ function handleMatchmakingSubmit(e) {
 
   const targetIndustries = formData.getAll('targetIndustries');
   const resourceNeeded = formData.getAll('resourceNeeded');
+  const freeDescription = (formData.get('freeDescription') || '').trim();
 
-  if (resourceNeeded.length === 0) {
-    alert(window.i18n.getCurrentLang() === 'zh'
-      ? '請至少選擇一個需要的資源'
-      : 'Please select at least one resource needed');
-    return;
-  }
+  // 至少填寫一項（需要的資源、想媒合的產業、自由描述）
+  const hasResource = resourceNeeded.length > 0;
+  const hasIndustry = targetIndustries.length > 0;
+  const hasDescription = freeDescription.length > 0;
 
-  if (targetIndustries.length === 0) {
+  if (!hasResource && !hasIndustry && !hasDescription) {
     alert(window.i18n.getCurrentLang() === 'zh'
-      ? '請至少選擇一個想媒合的產業'
-      : 'Please select at least one industry to match');
+      ? '請至少填寫一項：需要的資源、想媒合的產業、或直接描述您的需求'
+      : 'Please fill in at least one: resources needed, industries to match, or describe your needs');
     return;
   }
 
@@ -258,16 +257,41 @@ function handleMatchmakingSubmit(e) {
     resourceNeeded: resourceNeeded,
     resourceOtherText: formData.get('resourceOtherText') || '',
     targetIndustries: targetIndustries,
+    freeDescription: freeDescription,
     language: window.i18n.getCurrentLang(),
     submittedAt: new Date().toISOString()
   };
 
   console.log('Matchmaking submission:', data);
-  showMatchmakingResult(targetIndustries);
+
+  // 根據填寫內容顯示結果
+  if (hasIndustry) {
+    showMatchmakingResult(targetIndustries);
+  } else {
+    showMatchmakingResultGeneral();
+  }
+
   form.reset();
   // Hide the other text input after reset
   const resourceOtherText = document.getElementById('resourceOtherText');
   if (resourceOtherText) resourceOtherText.style.display = 'none';
+}
+
+function showMatchmakingResultGeneral() {
+  const modal = document.getElementById('matchmakingResult');
+  const statsContainer = document.getElementById('resultStats');
+
+  statsContainer.innerHTML = `
+    <div class="result-stat-item">
+      <span class="result-stat-label">
+        <span>${window.i18n.t('result.totalResources') || '總可用資源'}</span>
+      </span>
+      <span class="result-stat-value">
+        <span class="result-stat-number">2,000+</span> ${window.i18n.t('result.resourceAvailable') || '位企業主資源'}
+      </span>
+    </div>
+  `;
+  modal.classList.add('active');
 }
 
 function showMatchmakingResult(targetIndustries) {

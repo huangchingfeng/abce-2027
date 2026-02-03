@@ -77,6 +77,10 @@ const translations = {
     'resource.channel': '通路/代理',
     'resource.talent': '人才',
     'resource.other': '其他',
+
+    // Free Description
+    'form.freeDescription': '或直接描述您的需求',
+    'form.requirementHint': '* 以上三項（需要的資源、想媒合的產業、自由描述）至少填寫一項',
     'form.description': '媒合需求描述（選填）',
     'form.attendedBefore': '曾參加過商媒會？',
     'form.yes': '是',
@@ -114,6 +118,7 @@ const translations = {
     // Result
     'result.title': '感謝您的填寫！',
     'result.subtitle': '根據您的需求，我們會參與的 2,000+ 位企業主裡面：',
+    'result.totalResources': '總可用資源',
     'result.resourceAvailable': '位企業主資源',
     'result.notice': '我們將評估媒合機會，並於活動前通知您參與媒合。',
     'result.applyBooth': '申請展示攤位',
@@ -210,6 +215,10 @@ const translations = {
     'resource.channel': 'Channel/Distributor',
     'resource.talent': 'Talent',
     'resource.other': 'Other',
+
+    // Free Description
+    'form.freeDescription': 'Or describe your needs',
+    'form.requirementHint': '* Please fill in at least one of the above three sections',
     'form.description': 'Matching Requirements (Optional)',
     'form.attendedBefore': 'Attended ABCE before?',
     'form.yes': 'Yes',
@@ -247,6 +256,7 @@ const translations = {
     // Result
     'result.title': 'Thank You!',
     'result.subtitle': 'Based on your requirements, among 2,000+ business owners participating:',
+    'result.totalResources': 'Total Available Resources',
     'result.resourceAvailable': 'business owner resources',
     'result.notice': 'We\'ll evaluate matching opportunities and notify you before the event.',
     'result.applyBooth': 'Apply for Booth',
@@ -343,6 +353,10 @@ const translations = {
     'resource.channel': '販売チャネル',
     'resource.talent': '人材',
     'resource.other': 'その他',
+
+    // Free Description
+    'form.freeDescription': 'またはご要望を直接ご記入ください',
+    'form.requirementHint': '* 上記3項目のうち、少なくとも1つをご記入ください',
     'form.description': 'マッチング要件（任意）',
     'form.attendedBefore': '過去にABCEに参加されましたか？',
     'form.yes': 'はい',
@@ -380,6 +394,7 @@ const translations = {
     // Result
     'result.title': 'ありがとうございます！',
     'result.subtitle': 'ご要望に基づき、参加予定の2,000名以上のビジネスオーナーの中から：',
+    'result.totalResources': '利用可能なリソース総数',
     'result.resourceAvailable': '名のビジネスオーナーリソース',
     'result.notice': 'マッチング機会を評価し、イベント前にご連絡いたします。',
     'result.applyBooth': 'ブースを申請',
@@ -476,6 +491,10 @@ const translations = {
     'resource.channel': '유통채널',
     'resource.talent': '인재',
     'resource.other': '기타',
+
+    // Free Description
+    'form.freeDescription': '또는 직접 요구 사항을 기재하세요',
+    'form.requirementHint': '* 위 3가지 항목 중 최소 1개를 기재해 주세요',
     'form.description': '매칭 요구 사항 (선택 사항)',
     'form.attendedBefore': '이전에 ABCE에 참가하셨나요?',
     'form.yes': '예',
@@ -513,6 +532,7 @@ const translations = {
     // Result
     'result.title': '감사합니다!',
     'result.subtitle': '귀하의 요구 사항에 따라 참가 예정인 2,000명 이상의 비즈니스 오너 중:',
+    'result.totalResources': '총 가용 리소스',
     'result.resourceAvailable': '명의 비즈니스 오너 리소스',
     'result.notice': '매칭 기회를 평가하고 이벤트 전에 알려드립니다.',
     'result.applyBooth': '부스 신청',
