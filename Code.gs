@@ -281,8 +281,8 @@ function callGemini(prompt) {
 }
 
 // 取得 ABCE 資源庫（詳細數據）
-function getBNIResourceDatabase() {
-  // ABCE 亞洲商媒會 24 分會的詳細資源統計
+function getABCEResourceDatabase() {
+  // ABCE 亞洲商媒會的詳細資源統計（橫跨亞洲多國）
   return {
     // 產業分類（企業主數量）
     industries: {
@@ -381,7 +381,7 @@ function getBNIResourceDatabase() {
 
 // 智慧媒合分析
 function analyzeMatchmakingWithAI(userData) {
-  const resourceDB = getBNIResourceDatabase();
+  const resourceDB = getABCEResourceDatabase();
 
   // 如果有 API Key，嘗試使用 Gemini AI 生成回應
   if (GEMINI_API_KEY) {
@@ -455,7 +455,6 @@ function generateAIResponse(userData, resourceDB) {
   // 構建資源庫摘要（只列出相關的）
   let resourceSummary = 'ABCE 亞洲商媒會資源統計：\n';
   resourceSummary += `- 總企業主數：2,000+ 位\n`;
-  resourceSummary += `- 分會數：24 個\n`;
   resourceSummary += `- 涵蓋國家：4 個（台灣、日本、韓國、香港）\n\n`;
 
   // 加入相關資源的詳細數據
@@ -658,9 +657,9 @@ function generateCustomResponse(userData, resourceDB) {
 
     // 如果有多種需求，補充說明
     if (resourceNeeded.length > 1) {
-      summary = `您還需要${neededNames.slice(1).join('、')}等資源。ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
+      summary = `您還需要${neededNames.slice(1).join('、')}等資源。ABCE 亞洲商媒會 2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
     } else {
-      summary = `ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
+      summary = `ABCE 亞洲商媒會 2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
     }
 
     // 根據需要的資源顯示對應的資源統計
@@ -677,11 +676,11 @@ function generateCustomResponse(userData, resourceDB) {
   } else if (freeDescription) {
     // 只有自由描述，沒有勾選資源
     message = `您的需求「${freeDescription.substring(0, 50)}${freeDescription.length > 50 ? '...' : ''}」已記錄。`;
-    summary = 'ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，我們會評估是否有合適的資源：';
+    summary = 'ABCE 亞洲商媒會 2,000+ 位企業主，我們會評估是否有合適的資源：';
   } else {
     // 什麼都沒填，只選了產業
     message = '感謝您的需求提交，我們已收到您的資料。';
-    summary = 'ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業：';
+    summary = 'ABCE 亞洲商媒會 2,000+ 位企業主，涵蓋 12 大產業：';
   }
 
   // 根據目標產業補充資源列表
