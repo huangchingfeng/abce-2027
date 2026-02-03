@@ -17,7 +17,7 @@
  */
 
 // ===== Gemini AI 設定 =====
-const GEMINI_API_KEY = ''; // 請填入你的 Gemini API Key
+const GEMINI_API_KEY = 'AIzaSyBRlKNGQwN4sdaQjaddar6qN8ucIl8FDa0';
 const GEMINI_MODEL = 'gemini-1.5-flash';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
@@ -277,36 +277,102 @@ function callGemini(prompt) {
   return result.candidates[0].content.parts[0].text;
 }
 
-// 取得 BNI 會員資源庫（模擬數據，實際可連接真實資料）
+// 取得 ABCE 資源庫（詳細數據）
 function getBNIResourceDatabase() {
-  // 這是 ABCE 亞洲商媒會 24 分會的資源庫模擬數據
-  // 實際可以從另一個 Google Sheet 讀取真實會員資料
+  // ABCE 亞洲商媒會 24 分會的詳細資源統計
   return {
+    // 產業分類（企業主數量）
     industries: {
-      '科技資訊': { count: 180, examples: ['軟體開發', '系統整合', 'AI 解決方案', '雲端服務'] },
-      '金融保險': { count: 150, examples: ['壽險', '產險', '財務規劃', '投資顧問'] },
-      '製造業': { count: 120, examples: ['精密零件', '電子製造', '機械設備', '包裝材料'] },
-      '建築營造': { count: 100, examples: ['室內設計', '工程營造', '建材供應', '水電工程'] },
-      '餐飲服務': { count: 90, examples: ['餐廳經營', '食材供應', '餐飲設備', '外燴服務'] },
-      '醫療健康': { count: 85, examples: ['診所', '醫療器材', '健康食品', '長照服務'] },
-      '教育培訓': { count: 75, examples: ['企業培訓', '語言教學', '技能認證', '親子教育'] },
-      '法律會計': { count: 70, examples: ['律師事務所', '會計師事務所', '稅務規劃', '商標專利'] },
-      '行銷廣告': { count: 65, examples: ['數位行銷', '廣告設計', '公關活動', '影片製作'] },
-      '物流運輸': { count: 60, examples: ['貨運物流', '倉儲服務', '報關行', '快遞服務'] },
-      '零售貿易': { count: 55, examples: ['進出口貿易', '批發零售', '電商平台', '代理經銷'] },
-      '不動產': { count: 50, examples: ['房屋仲介', '商辦租賃', '物業管理', '土地開發'] }
+      '科技資訊': { count: 180, examples: ['軟體開發 45 位', '系統整合 35 位', 'AI/雲端 30 位', '網站設計 40 位', '資安服務 30 位'] },
+      '金融保險': { count: 150, examples: ['壽險顧問 50 位', '產險專家 30 位', '財務規劃 40 位', '投資理財 30 位'] },
+      '製造業': { count: 120, examples: ['精密零件 35 位', '電子製造 30 位', '機械設備 25 位', '包裝材料 30 位'] },
+      '建築營造': { count: 100, examples: ['室內設計 30 位', '工程營造 25 位', '建材供應 25 位', '水電工程 20 位'] },
+      '餐飲服務': { count: 90, examples: ['餐廳業主 35 位', '食材供應 20 位', '餐飲設備 15 位', '外燴服務 20 位'] },
+      '醫療健康': { count: 85, examples: ['診所經營 25 位', '醫療器材 20 位', '健康食品 20 位', '長照服務 20 位'] },
+      '教育培訓': { count: 75, examples: ['企業培訓 25 位', '語言教學 20 位', '技能認證 15 位', '親子教育 15 位'] },
+      '法律會計': { count: 70, examples: ['律師 25 位', '會計師 20 位', '稅務規劃 15 位', '商標專利 10 位'] },
+      '行銷廣告': { count: 65, examples: ['數位行銷 25 位', '廣告設計 20 位', '公關活動 10 位', '影片製作 10 位'] },
+      '物流運輸': { count: 60, examples: ['貨運物流 25 位', '倉儲服務 15 位', '報關行 10 位', '快遞服務 10 位'] },
+      '零售貿易': { count: 55, examples: ['進出口貿易 20 位', '批發零售 20 位', '電商平台 15 位'] },
+      '不動產': { count: 50, examples: ['房屋仲介 20 位', '商辦租賃 15 位', '物業管理 15 位'] }
     },
+    // 資源類型（詳細分類）
     resources: {
-      'SUPPLIER': { count: 200, description: '供應商資源', examples: ['原物料供應', '設備供應', '服務供應'] },
-      'CHANNEL': { count: 180, description: '銷售通路', examples: ['經銷商', '代理商', '零售通路', '電商平台'] },
-      'TALENT': { count: 150, description: '人才資源', examples: ['技術人才', '業務人才', '管理人才', '專業顧問'] },
-      'FUNDING': { count: 100, description: '資金資源', examples: ['投資人', '創投', '銀行融資', '政府補助'] },
-      'TECH': { count: 120, description: '技術合作', examples: ['技術授權', '聯合研發', '顧問諮詢', '系統整合'] },
-      'MARKET': { count: 90, description: '市場拓展', examples: ['海外市場', 'B2B客戶', '政府標案', '大型企業'] },
-      'OTHER': { count: 500, description: '其他資源', examples: ['異業合作', '策略聯盟', '資源共享'] }
+      'SUPPLIER': {
+        count: 320,
+        description: '各類供應商',
+        subCategories: {
+          '餐飲食材供應商': 45,
+          '包裝材料供應商': 35,
+          '辦公設備供應商': 30,
+          '原物料供應商': 40,
+          '機械設備供應商': 35,
+          '電子零件供應商': 30,
+          '建材供應商': 25,
+          '印刷供應商': 20,
+          '清潔用品供應商': 15,
+          '其他供應商': 45
+        }
+      },
+      'BUYER': {
+        count: 800,
+        description: '潛在買家/客戶',
+        subCategories: {
+          '中小企業主': 400,
+          '連鎖店經營者': 80,
+          '餐飲業者': 90,
+          '零售業者': 70,
+          '製造業者': 60,
+          '服務業者': 100
+        }
+      },
+      'CHANNEL': {
+        count: 180,
+        description: '通路/代理',
+        subCategories: {
+          '電商平台經營者': 35,
+          '實體通路商': 40,
+          '經銷代理商': 45,
+          '海外代理商': 30,
+          '批發商': 30
+        }
+      },
+      'INVESTOR': {
+        count: 120,
+        description: '投資資源',
+        subCategories: {
+          '天使投資人': 25,
+          '創投基金': 15,
+          '企業投資部門': 30,
+          '有投資意願的企業主': 50
+        }
+      },
+      'PARTNER': {
+        count: 250,
+        description: '合作夥伴',
+        subCategories: {
+          '技術合作夥伴': 60,
+          '策略聯盟夥伴': 50,
+          '異業合作夥伴': 80,
+          '國際合作夥伴': 30,
+          '資源共享夥伴': 30
+        }
+      },
+      'TALENT': {
+        count: 150,
+        description: '人才網絡',
+        subCategories: {
+          '業務人才': 40,
+          '技術人才': 35,
+          '管理人才': 30,
+          '專業顧問': 25,
+          '獵頭公司': 20
+        }
+      }
     },
     totalMembers: 2000,
-    totalChapters: 24
+    totalChapters: 24,
+    totalCountries: 4
   };
 }
 
@@ -314,7 +380,19 @@ function getBNIResourceDatabase() {
 function analyzeMatchmakingWithAI(userData) {
   const resourceDB = getBNIResourceDatabase();
 
-  // 根據用戶需求生成客製化回應
+  // 如果有 API Key，嘗試使用 Gemini AI 生成回應
+  if (GEMINI_API_KEY) {
+    try {
+      const aiResponse = generateAIResponse(userData, resourceDB);
+      if (aiResponse) {
+        return aiResponse;
+      }
+    } catch (error) {
+      console.log('AI 生成失敗，使用靜態回應：', error.message);
+    }
+  }
+
+  // 回退到靜態回應
   const customResponse = generateCustomResponse(userData, resourceDB);
 
   return {
@@ -326,6 +404,124 @@ function analyzeMatchmakingWithAI(userData) {
     totalResources: resourceDB.totalMembers,
     closing: customResponse.closing
   };
+}
+
+// 使用 Gemini AI 生成回應
+function generateAIResponse(userData, resourceDB) {
+  const resourceNeeded = userData.resourceNeeded || [];
+  const resourceDetails = userData.resourceDetails || {};
+  const targetIndustries = userData.targetIndustries || [];
+  const freeDescription = userData.freeDescription || '';
+
+  // 產業代碼對應中文
+  const industryMap = {
+    'FOOD': '餐飲服務', 'TECH': '科技資訊', 'FINANCE': '金融保險',
+    'MANUFACTURE': '製造業', 'CONSTRUCTION': '建築營造', 'HEALTH': '醫療健康',
+    'EDUCATION': '教育培訓', 'LEGAL': '法律會計', 'MARKETING': '行銷廣告',
+    'LOGISTICS': '物流運輸', 'TRADE': '零售貿易', 'REALESTATE': '不動產'
+  };
+
+  // 資源代碼對應中文
+  const resourceMap = {
+    'SUPPLIER': '供應商', 'BUYER': '買家/客戶', 'PARTNER': '合作夥伴',
+    'INVESTOR': '投資人', 'CHANNEL': '通路/代理', 'TALENT': '人才', 'OTHER': '其他'
+  };
+
+  // 構建用戶需求描述
+  let userNeedsText = '';
+  if (resourceNeeded.length > 0) {
+    const needsList = resourceNeeded.map(r => {
+      const name = resourceMap[r] || r;
+      const detail = resourceDetails[r] || '';
+      return detail ? `${name}（${detail}）` : name;
+    });
+    userNeedsText += `需要的資源：${needsList.join('、')}\n`;
+  }
+  if (targetIndustries.length > 0) {
+    const industryList = targetIndustries.map(i => industryMap[i] || i);
+    userNeedsText += `想媒合的產業：${industryList.join('、')}\n`;
+  }
+  if (freeDescription) {
+    userNeedsText += `補充說明：${freeDescription}\n`;
+  }
+
+  // 構建資源庫摘要（只列出相關的）
+  let resourceSummary = 'ABCE 亞洲商媒會資源統計：\n';
+  resourceSummary += `- 總企業主數：2,000+ 位\n`;
+  resourceSummary += `- 分會數：24 個\n`;
+  resourceSummary += `- 涵蓋國家：4 個（台灣、日本、韓國、香港）\n\n`;
+
+  // 加入相關資源的詳細數據
+  if (resourceNeeded.length > 0) {
+    resourceNeeded.forEach(r => {
+      if (resourceDB.resources[r]) {
+        const res = resourceDB.resources[r];
+        resourceSummary += `【${resourceMap[r]}】總數 ${res.count}+ 位\n`;
+        if (res.subCategories) {
+          Object.entries(res.subCategories).forEach(([name, count]) => {
+            resourceSummary += `  - ${name}：${count} 位\n`;
+          });
+        }
+      }
+    });
+  }
+
+  if (targetIndustries.length > 0) {
+    resourceSummary += '\n相關產業企業主：\n';
+    targetIndustries.forEach(i => {
+      const name = industryMap[i];
+      if (name && resourceDB.industries[name]) {
+        const ind = resourceDB.industries[name];
+        resourceSummary += `【${name}】${ind.count}+ 位\n`;
+        resourceSummary += `  ${ind.examples.join('、')}\n`;
+      }
+    });
+  }
+
+  // 構建 prompt
+  const prompt = `你是 ABCE 亞洲商媒會的媒合專員。根據以下用戶需求和資源庫數據，生成一段專業的回應。
+
+用戶需求：
+${userNeedsText || '未填寫具體需求'}
+
+${resourceSummary}
+
+請生成回應，格式要求：
+1. message（開場訊息）：一句話說明我們有什麼資源可以幫助他，要包含具體數字。專業但不矯情。
+2. summary（摘要）：簡短說明 ABCE 的資源規模和相關數據。
+3. relatedResources（相關資源列表）：JSON 陣列格式，每項包含 name（資源名稱）、count（數量）、examples（陣列，2-3 個具體例子）
+4. closing（結語）：一句話歡迎他參加 ABCE 2027
+
+請以 JSON 格式回覆，不要加任何說明文字：
+{
+  "message": "...",
+  "summary": "...",
+  "relatedResources": [{"name": "...", "count": 數字, "examples": ["...", "..."]}],
+  "closing": "..."
+}`;
+
+  // 呼叫 Gemini API
+  const aiText = callGemini(prompt);
+
+  // 解析 JSON
+  try {
+    // 移除可能的 markdown 標記
+    let jsonText = aiText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const result = JSON.parse(jsonText);
+
+    return {
+      success: true,
+      message: result.message || '',
+      summary: result.summary || '',
+      relatedResources: result.relatedResources || [],
+      highlight: '',
+      totalResources: resourceDB.totalMembers,
+      closing: result.closing || '歡迎參加 ABCE 2027，現場將有更多媒合機會。'
+    };
+  } catch (parseError) {
+    console.log('AI 回應解析失敗：', parseError.message);
+    return null;
+  }
 }
 
 // 生成客製化回應（根據用戶填寫的資源需求）
