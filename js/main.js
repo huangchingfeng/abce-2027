@@ -1,5 +1,37 @@
 // ===== ABCE 2027 Main JavaScript =====
 
+// ===== Backend API Configuration =====
+const ABCE_CONFIG = {
+  // 請在這裡填入您的 Google Apps Script 部署網址
+  // 例如: 'https://script.google.com/macros/s/xxxxx/exec'
+  API_URL: localStorage.getItem('abce_api_url') || ''
+};
+
+// 發送資料到後台
+async function sendToBackend(data) {
+  if (!ABCE_CONFIG.API_URL) {
+    console.log('Backend not configured, data logged only:', data);
+    return { success: false, message: 'Backend not configured' };
+  }
+
+  try {
+    await fetch(ABCE_CONFIG.API_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Google Apps Script 需要 no-cors 模式
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    console.log('Data sent to backend:', data);
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to send to backend:', error);
+    return { success: false, error: error.message };
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize i18n
   window.i18n.initLanguage();
@@ -250,6 +282,7 @@ function handleMatchmakingSubmit(e) {
   }
 
   const data = {
+    type: 'matchmaking',
     name: formData.get('name'),
     company: formData.get('company'),
     contactType: formData.get('contactType'),
@@ -263,6 +296,9 @@ function handleMatchmakingSubmit(e) {
   };
 
   console.log('Matchmaking submission:', data);
+
+  // 發送到後台
+  sendToBackend(data);
 
   // 根據填寫內容顯示結果
   if (hasIndustry) {
@@ -327,6 +363,7 @@ function handleBoothSubmit(e) {
   const formData = new FormData(form);
 
   const data = {
+    type: 'booth',
     name: formData.get('name'),
     company: formData.get('company'),
     email: formData.get('email'),
@@ -344,6 +381,9 @@ function handleBoothSubmit(e) {
   };
 
   console.log('Booth submission:', data);
+
+  // 發送到後台
+  sendToBackend(data);
   document.getElementById('boothSuccess').classList.add('active');
   form.reset();
 }

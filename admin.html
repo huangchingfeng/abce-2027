@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABCE 2027 後台管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #0A0A0F;
+      --color-bg-secondary: #12121A;
+      --color-bg-tertiary: #1A1A24;
+      --color-gold: #C9A227;
+      --color-gold-light: #E8C547;
+      --color-text: #FFFFFF;
+      --color-text-secondary: #A0A0B0;
+      --color-border: rgba(255, 255, 255, 0.1);
+      --color-success: #4CAF50;
+      --color-warning: #FF9800;
+      --color-danger: #F44336;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .admin-header {
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .admin-logo span {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 20px rgba(201, 162, 39, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-gold);
+    }
+
+    /* Main Content */
+    .admin-main {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(201, 162, 39, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .stat-card .label {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-gold);
+    }
+
+    /* Filters */
+    .filters-bar {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .filter-input {
+      background: var(--color-bg-tertiary);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      color: var(--color-text);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .filter-input:focus {
+      border-color: var(--color-gold);
+    }
+
+    /* Table */
+    .table-container {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    th {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background: rgba(201, 162, 39, 0.05);
+    }
+
+    td {
+      font-size: 0.875rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin: 0.125rem;
+      background: rgba(201, 162, 39, 0.2);
+      color: var(--color-gold);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-new {
+      background: rgba(76, 175, 80, 0.2);
+      color: var(--color-success);
+    }
+
+    .status-contacted {
+      background: rgba(255, 152, 0, 0.2);
+      color: var(--color-warning);
+    }
+
+    .status-done {
+      background: rgba(201, 162, 39, 0.2);
+      color: var(--color-gold);
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      color: var(--color-gold);
+      background: rgba(201, 162, 39, 0.1);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--color-text-secondary);
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--color-border);
+      border-top-color: var(--color-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .detail-label {
+      width: 120px;
+      flex-shrink: 0;
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .detail-value {
+      flex: 1;
+    }
+
+    /* Setup Guide */
+    .setup-guide {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .setup-guide h2 {
+      color: var(--color-gold);
+      margin-bottom: 1rem;
+    }
+
+    .setup-guide ol {
+      padding-left: 1.5rem;
+      color: var(--color-text-secondary);
+    }
+
+    .setup-guide li {
+      margin-bottom: 0.75rem;
+    }
+
+    .setup-guide code {
+      background: var(--color-bg-tertiary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: var(--color-gold);
+    }
+
+    .config-input {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .admin-main {
+        padding: 1rem;
+      }
+
+      .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      th, td {
+        padding: 0.75rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-logo">
+      <h1>ABCE 2027</h1>
+      <span>後台管理系統</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="refreshData()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        重新整理
+      </button>
+      <button class="btn btn-primary" onclick="exportCSV()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+        </svg>
+        匯出 CSV
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <!-- Setup Guide (shown when no API URL configured) -->
+    <div class="setup-guide" id="setupGuide">
+      <h2>⚙️ 設定後台</h2>
+      <p style="margin-bottom: 1rem;">請完成以下步驟來啟用後台：</p>
+      <ol>
+        <li>開啟 Google Sheets，建立一個新的試算表</li>
+        <li>點擊 <strong>擴充功能 → Apps Script</strong></li>
+        <li>複製下方的 <code>Code.gs</code> 內容，貼到 Apps Script 編輯器</li>
+        <li>點擊 <strong>部署 → 新增部署 → 網頁應用程式</strong></li>
+        <li>設定「存取權」為 <strong>「所有人」</strong>，然後部署</li>
+        <li>複製部署後的網址，貼到下方輸入框</li>
+      </ol>
+      <input type="text" class="filter-input config-input" id="apiUrlInput"
+             placeholder="貼上 Google Apps Script 部署網址..."
+             onchange="saveApiUrl(this.value)">
+      <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="testConnection()">
+        測試連線
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid" style="display: none;">
+      <div class="stat-card">
+        <div class="label">總提交數</div>
+        <div class="value" id="totalCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">媒合表單</div>
+        <div class="value" id="matchmakingCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">攤位申請</div>
+        <div class="value" id="boothCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">今日新增</div>
+        <div class="value" id="todayCount">0</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar" id="filtersBar" style="display: none;">
+      <div class="filter-group">
+        <label>搜尋：</label>
+        <input type="text" class="filter-input" id="searchInput" placeholder="姓名、公司、聯絡方式..." oninput="filterData()">
+      </div>
+      <div class="filter-group">
+        <label>類型：</label>
+        <select class="filter-input" id="typeFilter" onchange="filterData()">
+          <option value="">全部</option>
+          <option value="matchmaking">媒合表單</option>
+          <option value="booth">攤位申請</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>日期：</label>
+        <input type="date" class="filter-input" id="dateFilter" onchange="filterData()">
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container" id="tableContainer" style="display: none;">
+      <div class="table-header">
+        <h2>提交紀錄</h2>
+        <span id="recordCount">0 筆資料</span>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>時間</th>
+              <th>類型</th>
+              <th>姓名</th>
+              <th>公司</th>
+              <th>聯絡方式</th>
+              <th>需求/產業</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loadingState" style="display: none;">
+      <div class="spinner"></div>
+      <p>載入資料中...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 12h6M12 9v6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+      </svg>
+      <p>目前沒有資料</p>
+    </div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>詳細資料</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Details will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration
+    const CONFIG_KEY = 'abce_admin_api_url';
+    let API_URL = localStorage.getItem(CONFIG_KEY) || '';
+    let allData = [];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      if (API_URL) {
+        document.getElementById('apiUrlInput').value = API_URL;
+        loadData();
+      }
+    });
+
+    // Save API URL
+    function saveApiUrl(url) {
+      API_URL = url.trim();
+      localStorage.setItem(CONFIG_KEY, API_URL);
+    }
+
+    // Test Connection
+    async function testConnection() {
+      const url = document.getElementById('apiUrlInput').value.trim();
+      if (!url) {
+        alert('請輸入 API 網址');
+        return;
+      }
+
+      saveApiUrl(url);
+
+      try {
+        showLoading(true);
+        const response = await fetch(url + '?action=test');
+        const result = await response.json();
+
+        if (result.success) {
+          alert('✅ 連線成功！');
+          loadData();
+        } else {
+          alert('❌ 連線失敗：' + (result.error || '未知錯誤'));
+        }
+      } catch (error) {
+        alert('❌ 連線失敗：' + error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Load Data
+    async function loadData() {
+      if (!API_URL) return;
+
+      showLoading(true);
+      document.getElementById('setupGuide').style.display = 'none';
+
+      try {
+        const response = await fetch(API_URL + '?action=getAll');
+        const result = await response.json();
+
+        if (result.success) {
+          allData = result.data || [];
+          updateStats();
+          renderTable(allData);
+
+          document.getElementById('statsGrid').style.display = 'grid';
+          document.getElementById('filtersBar').style.display = 'flex';
+          document.getElementById('tableContainer').style.display = 'block';
+        } else {
+          throw new Error(result.error || '載入失敗');
+        }
+      } catch (error) {
+        console.error('Load error:', error);
+        document.getElementById('setupGuide').style.display = 'block';
+        alert('載入失敗：' + error.message);
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Refresh Data
+    function refreshData() {
+      loadData();
+    }
+
+    // Update Stats
+    function updateStats() {
+      const today = new Date().toISOString().split('T')[0];
+      const matchmaking = allData.filter(d => d.type === 'matchmaking');
+      const booth = allData.filter(d => d.type === 'booth');
+      const todayData = allData.filter(d => d.submittedAt && d.submittedAt.startsWith(today));
+
+      document.getElementById('totalCount').textContent = allData.length;
+      document.getElementById('matchmakingCount').textContent = matchmaking.length;
+      document.getElementById('boothCount').textContent = booth.length;
+      document.getElementById('todayCount').textContent = todayData.length;
+    }
+
+    // Render Table
+    function renderTable(data) {
+      const tbody = document.getElementById('dataTable');
+
+      if (data.length === 0) {
+        document.getElementById('tableContainer').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('tableContainer').style.display = 'block';
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('recordCount').textContent = `${data.length} 筆資料`;
+
+      tbody.innerHTML = data.map((item, index) => {
+        const date = item.submittedAt ? new Date(item.submittedAt).toLocaleString('zh-TW') : '-';
+        const typeLabel = item.type === 'matchmaking' ? '媒合' : '攤位';
+        const typeClass = item.type === 'matchmaking' ? 'status-new' : 'status-contacted';
+
+        // Get contact info
+        let contact = '-';
+        if (item.contactType && item.contact) {
+          contact = `${item.contactType}: ${item.contact}`;
+        } else if (item.email) {
+          contact = item.email;
+        } else if (item.phone) {
+          contact = item.phone;
+        }
+
+        // Get needs/industries
+        let needs = [];
+        if (item.resourceNeeded && item.resourceNeeded.length) {
+          needs = needs.concat(item.resourceNeeded.slice(0, 2));
+        }
+        if (item.targetIndustries && item.targetIndustries.length) {
+          needs = needs.concat(item.targetIndustries.slice(0, 2));
+        }
+        if (item.industry) {
+          needs.push(item.industry);
+        }
+
+        return `
+          <tr>
+            <td>${date}</td>
+            <td><span class="status-badge ${typeClass}">${typeLabel}</span></td>
+            <td>${item.name || '-'}</td>
+            <td>${item.company || '-'}</td>
+            <td>${contact}</td>
+            <td>${needs.map(n => `<span class="tag">${n}</span>`).join('') || '-'}</td>
+            <td>
+              <button class="action-btn" onclick="showDetail(${index})" title="查看詳情">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Filter Data
+    function filterData() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const type = document.getElementById('typeFilter').value;
+      const date = document.getElementById('dateFilter').value;
+
+      let filtered = allData;
+
+      if (search) {
+        filtered = filtered.filter(d =>
+          (d.name && d.name.toLowerCase().includes(search)) ||
+          (d.company && d.company.toLowerCase().includes(search)) ||
+          (d.contact && d.contact.toLowerCase().includes(search)) ||
+          (d.email && d.email.toLowerCase().includes(search))
+        );
+      }
+
+      if (type) {
+        filtered = filtered.filter(d => d.type === type);
+      }
+
+      if (date) {
+        filtered = filtered.filter(d => d.submittedAt && d.submittedAt.startsWith(date));
+      }
+
+      renderTable(filtered);
+    }
+
+    // Show Detail
+    function showDetail(index) {
+      const item = allData[index];
+      const modal = document.getElementById('detailModal');
+      const body = document.getElementById('modalBody');
+
+      const fields = [
+        { label: '類型', value: item.type === 'matchmaking' ? '媒合表單' : '攤位申請' },
+        { label: '姓名', value: item.name },
+        { label: '公司', value: item.company },
+        { label: '聯絡方式', value: item.contactType ? `${item.contactType}: ${item.contact}` : (item.email || item.phone || '-') },
+        { label: '需要的資源', value: item.resourceNeeded ? item.resourceNeeded.join('、') : '-' },
+        { label: '其他資源說明', value: item.resourceOtherText || '-' },
+        { label: '想媒合的產業', value: item.targetIndustries ? item.targetIndustries.join('、') : '-' },
+        { label: '自由描述', value: item.freeDescription || '-' },
+        { label: '產業', value: item.industry || '-' },
+        { label: '公司介紹', value: item.companyIntro || '-' },
+        { label: '產品服務', value: item.products || '-' },
+        { label: '攤位數量', value: item.boothCount || '-' },
+        { label: '統一編號', value: item.taxId || '-' },
+        { label: '特殊需求', value: item.specialRequest || '-' },
+        { label: '語言', value: item.language || '-' },
+        { label: '提交時間', value: item.submittedAt ? new Date(item.submittedAt).toLocaleString('zh-TW') : '-' },
+      ];
+
+      body.innerHTML = fields
+        .filter(f => f.value && f.value !== '-')
+        .map(f => `
+          <div class="detail-row">
+            <div class="detail-label">${f.label}</div>
+            <div class="detail-value">${f.value}</div>
+          </div>
+        `).join('');
+
+      modal.classList.add('active');
+    }
+
+    // Close Modal
+    function closeModal() {
+      document.getElementById('detailModal').classList.remove('active');
+    }
+
+    // Export CSV
+    function exportCSV() {
+      if (allData.length === 0) {
+        alert('沒有資料可匯出');
+        return;
+      }
+
+      const headers = ['提交時間', '類型', '姓名', '公司', '聯絡方式', '聯絡資訊', '需要的資源', '其他資源', '想媒合的產業', '自由描述', '產業', '公司介紹', '產品服務', '攤位數量', '統一編號', '特殊需求', '語言'];
+
+      const rows = allData.map(d => [
+        d.submittedAt || '',
+        d.type === 'matchmaking' ? '媒合表單' : '攤位申請',
+        d.name || '',
+        d.company || '',
+        d.contactType || '',
+        d.contact || d.email || d.phone || '',
+        d.resourceNeeded ? d.resourceNeeded.join('、') : '',
+        d.resourceOtherText || '',
+        d.targetIndustries ? d.targetIndustries.join('、') : '',
+        d.freeDescription || '',
+        d.industry || '',
+        d.companyIntro || '',
+        d.products || '',
+        d.boothCount || '',
+        d.taxId || '',
+        d.specialRequest || '',
+        d.language || ''
+      ]);
+
+      const csvContent = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
+
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `ABCE2027_submissions_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }
+
+    // Show Loading
+    function showLoading(show) {
+      document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('detailModal').addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeModal();
+      }
+    });
+
+    // Close modal on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
