@@ -279,7 +279,7 @@ function callGemini(prompt) {
 
 // 取得 BNI 會員資源庫（模擬數據，實際可連接真實資料）
 function getBNIResourceDatabase() {
-  // 這是 BNI 華字輩 24 分會的資源庫模擬數據
+  // 這是 ABCE 亞洲商媒會 24 分會的資源庫模擬數據
   // 實際可以從另一個 Google Sheet 讀取真實會員資料
   return {
     industries: {
@@ -319,7 +319,7 @@ function analyzeMatchmakingWithAI(userData) {
   return {
     success: true,
     message: '感謝您的需求提交，我們已收到您的資料。',
-    summary: `BNI 華字輩 24 分會擁有 2,000+ 位企業主資源，涵蓋 12 大產業。根據您的需求，以下是相關的資源統計：`,
+    summary: `ABCE 亞洲商媒會 24 分會擁有 2,000+ 位企業主資源，涵蓋 12 大產業。根據您的需求，以下是相關的資源統計：`,
     relatedResources: relatedResources.list,
     highlight: relatedResources.highlight,
     totalResources: resourceDB.totalMembers,
