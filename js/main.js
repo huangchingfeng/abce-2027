@@ -2,9 +2,7 @@
 
 // ===== Backend API Configuration =====
 const ABCE_CONFIG = {
-  // 請在這裡填入您的 Google Apps Script 部署網址
-  // 例如: 'https://script.google.com/macros/s/xxxxx/exec'
-  API_URL: localStorage.getItem('abce_api_url') || ''
+  API_URL: 'https://script.google.com/macros/s/AKfycbwNQN3D0vvnluWDIxsUXUssRV2p12FiVnoP_4hYEABS711V6jj_DE5xhDQ9DA59oQ6N/exec'
 };
 
 // 發送資料到後台
