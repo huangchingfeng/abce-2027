@@ -49,7 +49,7 @@ const translations = {
     // Booth
     'booth.title': '限量展示攤位',
     'booth.subtitle': '在 2,000 位商務人士面前展示您的產品與服務，把握難得的跨國商機！',
-    'booth.limited': '僅限 30 個攤位',
+    'booth.limited': '🔥 第一波開放僅限 30 個攤位',
     'booth.benefit1': '接觸 2,000+ 潛在客戶',
     'booth.benefit2': '跨國商務媒合機會',
     'booth.benefit3': '曾參加者可報名 2 個攤位',
@@ -187,7 +187,7 @@ const translations = {
     // Booth
     'booth.title': 'Limited Exhibition Booths',
     'booth.subtitle': 'Showcase your products and services to 2,000 business professionals. Seize this rare cross-border opportunity!',
-    'booth.limited': 'Only 30 Booths Available',
+    'booth.limited': '🔥 First Wave: Only 30 Booths Available',
     'booth.benefit1': 'Reach 2,000+ potential clients',
     'booth.benefit2': 'Cross-border business matching',
     'booth.benefit3': 'Previous attendees can apply for 2 booths',
@@ -325,7 +325,7 @@ const translations = {
     // Booth
     'booth.title': '限定展示ブース',
     'booth.subtitle': '2,000名のビジネスパーソンに製品やサービスを展示。貴重な国際ビジネスチャンスをお見逃しなく！',
-    'booth.limited': '30ブース限定',
+    'booth.limited': '🔥 第一弾：30ブース限定',
     'booth.benefit1': '2,000名以上の潜在顧客にリーチ',
     'booth.benefit2': '国際ビジネスマッチング',
     'booth.benefit3': '過去参加者は2ブース申請可能',
@@ -463,7 +463,7 @@ const translations = {
     // Booth
     'booth.title': '한정 전시 부스',
     'booth.subtitle': '2,000명의 비즈니스 전문가에게 제품과 서비스를 선보이세요. 귀중한 국제 비즈니스 기회를 놓치지 마세요!',
-    'booth.limited': '30개 부스 한정',
+    'booth.limited': '🔥 1차 모집: 30개 부스 한정',
     'booth.benefit1': '2,000명 이상의 잠재 고객 접근',
     'booth.benefit2': '국제 비즈니스 매칭',
     'booth.benefit3': '이전 참가자는 2개 부스 신청 가능',

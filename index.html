@@ -274,39 +274,59 @@
           </div>
 
           <div class="form-group">
-            <label data-i18n="form.resourceNeeded">需要的資源</label>
+            <label data-i18n="form.resourceNeeded">需要的資源（勾選後可補充說明）</label>
             <div class="resource-input-wrapper">
-              <div class="checkbox-grid checkbox-grid-simple" id="resourceCheckboxes">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="SUPPLIER">
-                  <span data-i18n="resource.supplier">供應商</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="BUYER">
-                  <span data-i18n="resource.buyer">買家/客戶</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="PARTNER">
-                  <span data-i18n="resource.partner">合作夥伴</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="INVESTOR">
-                  <span data-i18n="resource.investor">投資人</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="CHANNEL">
-                  <span data-i18n="resource.channel">通路/代理</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="resourceNeeded" value="TALENT">
-                  <span data-i18n="resource.talent">人才</span>
-                </label>
-                <label class="checkbox-label resource-other-label">
-                  <input type="checkbox" name="resourceNeeded" value="OTHER" id="resourceOtherCheck">
-                  <span data-i18n="resource.other">其他</span>
-                </label>
+              <div class="resource-options" id="resourceCheckboxes">
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="SUPPLIER" data-resource="supplier">
+                    <span data-i18n="resource.supplier">供應商</span>
+                  </label>
+                  <input type="text" name="resourceDetail_SUPPLIER" class="resource-detail-input" placeholder="例如：餐飲供應商、肉類供應商、紙類供應商..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="BUYER" data-resource="buyer">
+                    <span data-i18n="resource.buyer">買家/客戶</span>
+                  </label>
+                  <input type="text" name="resourceDetail_BUYER" class="resource-detail-input" placeholder="例如：餐廳業者、批發商、零售商..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="PARTNER" data-resource="partner">
+                    <span data-i18n="resource.partner">合作夥伴</span>
+                  </label>
+                  <input type="text" name="resourceDetail_PARTNER" class="resource-detail-input" placeholder="例如：技術合作、策略聯盟、跨業合作..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="INVESTOR" data-resource="investor">
+                    <span data-i18n="resource.investor">投資人</span>
+                  </label>
+                  <input type="text" name="resourceDetail_INVESTOR" class="resource-detail-input" placeholder="例如：天使投資人、創投、企業投資..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="CHANNEL" data-resource="channel">
+                    <span data-i18n="resource.channel">通路/代理</span>
+                  </label>
+                  <input type="text" name="resourceDetail_CHANNEL" class="resource-detail-input" placeholder="例如：電商平台、實體通路、海外代理..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="TALENT" data-resource="talent">
+                    <span data-i18n="resource.talent">人才</span>
+                  </label>
+                  <input type="text" name="resourceDetail_TALENT" class="resource-detail-input" placeholder="例如：業務人才、技術人才、管理人才..." style="display: none;">
+                </div>
+                <div class="resource-option-item">
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="resourceNeeded" value="OTHER" data-resource="other">
+                    <span data-i18n="resource.other">其他</span>
+                  </label>
+                  <input type="text" name="resourceDetail_OTHER" class="resource-detail-input" placeholder="請說明您需要的資源..." style="display: none;">
+                </div>
               </div>
-              <input type="text" id="resourceOtherText" name="resourceOtherText" class="resource-other-input" placeholder="請說明您需要的資源..." style="display: none;">
             </div>
           </div>
 
@@ -397,7 +417,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
           </svg>
-          <span data-i18n="booth.limited">僅限 30 個攤位</span>
+          <span data-i18n="booth.limited">🔥 第一波開放僅限 30 個攤位</span>
         </div>
         <h2 class="section-title" data-i18n="booth.title">限量展示攤位</h2>
         <p class="section-subtitle" data-i18n="booth.subtitle">
@@ -549,7 +569,8 @@
 
           <div class="pricing-box">
             <div class="pricing-amount">
-              NT$ 10,000 <span style="font-size: 0.5em; font-weight: 400;">/ <span data-i18n="booth.perBooth">每攤位</span></span>
+              <span style="font-size: 0.6em; font-weight: 500; display: block; margin-bottom: 4px;">訂金</span>
+              NT$ 15,000 <span style="font-size: 0.5em; font-weight: 400;">/ <span data-i18n="booth.perBooth">每攤位</span></span>
             </div>
             <p class="pricing-note" data-i18n="booth.pricingNote">* 確認報名後將通知付款方式</p>
           </div>

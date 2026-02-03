@@ -244,17 +244,21 @@ function initForms() {
     boothForm.addEventListener('submit', handleBoothSubmit);
   }
 
-  // Handle "Other" checkbox toggle for resource input
-  const resourceOtherCheck = document.getElementById('resourceOtherCheck');
-  const resourceOtherText = document.getElementById('resourceOtherText');
-  if (resourceOtherCheck && resourceOtherText) {
-    resourceOtherCheck.addEventListener('change', () => {
-      resourceOtherText.style.display = resourceOtherCheck.checked ? 'block' : 'none';
-      if (resourceOtherCheck.checked) {
-        resourceOtherText.focus();
+  // Handle resource checkbox toggle for detail inputs
+  const resourceCheckboxes = document.querySelectorAll('#resourceCheckboxes input[type="checkbox"]');
+  resourceCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const detailInput = checkbox.closest('.resource-option-item').querySelector('.resource-detail-input');
+      if (detailInput) {
+        detailInput.style.display = checkbox.checked ? 'block' : 'none';
+        if (checkbox.checked) {
+          detailInput.focus();
+        } else {
+          detailInput.value = ''; // 取消勾選時清空輸入
+        }
       }
     });
-  }
+  });
 }
 
 function handleMatchmakingSubmit(e) {
@@ -266,6 +270,15 @@ function handleMatchmakingSubmit(e) {
   const targetIndustries = formData.getAll('targetIndustries');
   const resourceNeeded = formData.getAll('resourceNeeded');
   const freeDescription = (formData.get('freeDescription') || '').trim();
+
+  // 收集每個資源的詳細說明
+  const resourceDetails = {};
+  resourceNeeded.forEach(resource => {
+    const detail = formData.get(`resourceDetail_${resource}`) || '';
+    if (detail.trim()) {
+      resourceDetails[resource] = detail.trim();
+    }
+  });
 
   // 至少填寫一項（需要的資源、想媒合的產業、自由描述）
   const hasResource = resourceNeeded.length > 0;
@@ -286,7 +299,7 @@ function handleMatchmakingSubmit(e) {
     contactType: formData.get('contactType'),
     contact: formData.get('contact'),
     resourceNeeded: resourceNeeded,
-    resourceOtherText: formData.get('resourceOtherText') || '',
+    resourceDetails: resourceDetails,
     targetIndustries: targetIndustries,
     freeDescription: freeDescription,
     language: window.i18n.getCurrentLang(),
@@ -306,9 +319,10 @@ function handleMatchmakingSubmit(e) {
   }
 
   form.reset();
-  // Hide the other text input after reset
-  const resourceOtherText = document.getElementById('resourceOtherText');
-  if (resourceOtherText) resourceOtherText.style.display = 'none';
+  // 隱藏所有資源詳細說明輸入框
+  document.querySelectorAll('.resource-detail-input').forEach(input => {
+    input.style.display = 'none';
+  });
 }
 
 function showMatchmakingResultGeneral() {
