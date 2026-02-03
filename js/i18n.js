@@ -71,12 +71,19 @@ const translations = {
 
     // Resources
     'resource.supplier': '供應商',
+    'resource.supplier.placeholder': '例如：餐飲供應商、肉類供應商、紙類供應商...',
     'resource.buyer': '買家/客戶',
+    'resource.buyer.placeholder': '例如：餐廳業者、批發商、零售商...',
     'resource.partner': '合作夥伴',
+    'resource.partner.placeholder': '例如：技術合作、策略聯盟、跨業合作...',
     'resource.investor': '投資人',
+    'resource.investor.placeholder': '例如：天使投資人、創投、企業投資...',
     'resource.channel': '通路/代理',
+    'resource.channel.placeholder': '例如：電商平台、實體通路、海外代理...',
     'resource.talent': '人才',
+    'resource.talent.placeholder': '例如：業務人才、技術人才、管理人才...',
     'resource.other': '其他',
+    'resource.other.placeholder': '請說明您需要的資源...',
 
     // Free Description
     'form.freeDescription': '或直接描述您的需求',
@@ -209,12 +216,19 @@ const translations = {
 
     // Resources
     'resource.supplier': 'Supplier',
+    'resource.supplier.placeholder': 'e.g., F&B supplier, meat supplier, paper supplier...',
     'resource.buyer': 'Buyer/Customer',
+    'resource.buyer.placeholder': 'e.g., restaurants, wholesalers, retailers...',
     'resource.partner': 'Partner',
+    'resource.partner.placeholder': 'e.g., tech collaboration, strategic alliance, cross-industry...',
     'resource.investor': 'Investor',
+    'resource.investor.placeholder': 'e.g., angel investor, VC, corporate investment...',
     'resource.channel': 'Channel/Distributor',
+    'resource.channel.placeholder': 'e.g., e-commerce platform, retail channel, overseas agent...',
     'resource.talent': 'Talent',
+    'resource.talent.placeholder': 'e.g., sales talent, tech talent, management talent...',
     'resource.other': 'Other',
+    'resource.other.placeholder': 'Please describe the resources you need...',
 
     // Free Description
     'form.freeDescription': 'Or describe your needs',
@@ -347,12 +361,19 @@ const translations = {
 
     // Resources
     'resource.supplier': 'サプライヤー',
+    'resource.supplier.placeholder': '例：飲食サプライヤー、食肉サプライヤー、紙類サプライヤー...',
     'resource.buyer': 'バイヤー/顧客',
+    'resource.buyer.placeholder': '例：レストラン、卸売業者、小売業者...',
     'resource.partner': 'パートナー',
+    'resource.partner.placeholder': '例：技術提携、戦略的提携、異業種コラボ...',
     'resource.investor': '投資家',
+    'resource.investor.placeholder': '例：エンジェル投資家、VC、企業投資...',
     'resource.channel': '販売チャネル',
+    'resource.channel.placeholder': '例：ECプラットフォーム、小売チャネル、海外代理店...',
     'resource.talent': '人材',
+    'resource.talent.placeholder': '例：営業人材、技術人材、管理人材...',
     'resource.other': 'その他',
+    'resource.other.placeholder': '必要なリソースをご記入ください...',
 
     // Free Description
     'form.freeDescription': 'またはご要望を直接ご記入ください',
@@ -485,12 +506,19 @@ const translations = {
 
     // Resources
     'resource.supplier': '공급업체',
+    'resource.supplier.placeholder': '예: 식음료 공급업체, 육류 공급업체, 종이류 공급업체...',
     'resource.buyer': '바이어/고객',
+    'resource.buyer.placeholder': '예: 레스토랑, 도매업체, 소매업체...',
     'resource.partner': '파트너',
+    'resource.partner.placeholder': '예: 기술 협력, 전략적 제휴, 이업종 콜라보...',
     'resource.investor': '투자자',
+    'resource.investor.placeholder': '예: 엔젤 투자자, VC, 기업 투자...',
     'resource.channel': '유통채널',
+    'resource.channel.placeholder': '예: 이커머스 플랫폼, 소매 채널, 해외 에이전트...',
     'resource.talent': '인재',
+    'resource.talent.placeholder': '예: 영업 인재, 기술 인재, 관리 인재...',
     'resource.other': '기타',
+    'resource.other.placeholder': '필요한 리소스를 기재해 주세요...',
 
     // Free Description
     'form.freeDescription': '또는 직접 요구 사항을 기재하세요',
@@ -603,6 +631,15 @@ function applyTranslations() {
       el.innerHTML = translation + ' <span class="required">*</span>';
     } else {
       el.textContent = translation;
+    }
+  });
+
+  // Apply placeholder translations
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const translation = t(key);
+    if (translation && translation !== key) {
+      el.placeholder = translation;
     }
   });
 
