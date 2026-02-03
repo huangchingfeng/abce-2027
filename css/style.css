@@ -1744,70 +1744,57 @@ button {
   }
 }
 
-/* ===== AI Matchmaking Result Styles ===== */
-.ai-result-header {
-  display: flex;
-  gap: var(--space-6);
-  align-items: center;
+/* ===== AI Matchmaking Result Styles (簡化版) ===== */
+.ai-greeting {
+  text-align: center;
   margin-bottom: var(--space-6);
-  padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-border);
 }
 
-.match-score-circle {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: conic-gradient(
-    var(--color-gold) calc(var(--score) * 1%),
-    var(--color-bg-tertiary) calc(var(--score) * 1%)
-  );
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.match-score-circle::before {
-  content: '';
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--color-bg-card);
-}
-
-.match-score-circle .score-number {
-  position: relative;
-  z-index: 1;
-  font-size: var(--text-2xl);
-  font-weight: 700;
-  color: var(--color-gold);
-}
-
-.match-score-circle .score-label {
-  position: relative;
-  z-index: 1;
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
-}
-
-.ai-summary {
-  flex: 1;
-}
-
-.ai-summary h4 {
-  color: var(--color-gold);
-  font-size: var(--text-lg);
+.ai-greeting .greeting-icon {
+  font-size: var(--text-4xl);
+  display: block;
   margin-bottom: var(--space-2);
 }
 
-.ai-summary p {
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-  line-height: 1.6;
+.ai-greeting h3 {
+  color: var(--color-gold);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.ai-resource-match {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.ai-resource-match p {
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.ai-highlight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--gradient-gold-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+  border: 1px solid var(--color-gold-muted);
+}
+
+.ai-highlight .highlight-icon {
+  font-size: var(--text-2xl);
+}
+
+.ai-highlight .highlight-text {
+  color: var(--color-gold-light);
+  font-size: var(--text-base);
+  font-weight: 600;
 }
 
 .ai-section {
@@ -1821,156 +1808,97 @@ button {
   font-weight: 600;
 }
 
-.potential-matches {
+.resource-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
-.match-item {
+.resource-item {
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-md);
   padding: var(--space-4);
-  border-left: 4px solid var(--color-border);
-  transition: var(--transition-base);
+  border-left: 4px solid var(--color-gold);
 }
 
-.match-item.high {
-  border-left-color: #4ade80;
-}
-
-.match-item.medium {
-  border-left-color: var(--color-gold);
-}
-
-.match-item.low {
-  border-left-color: var(--color-text-tertiary);
-}
-
-.match-header {
+.resource-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-2);
 }
 
-.match-category {
+.resource-name {
   font-weight: 600;
   color: var(--color-text-primary);
   font-size: var(--text-base);
 }
 
-.match-count {
+.resource-count {
   font-size: var(--text-sm);
   color: var(--color-gold);
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.match-relevance {
-  font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.match-item.high .match-relevance {
-  color: #4ade80;
-}
-
-.match-item.medium .match-relevance {
-  color: var(--color-gold);
-}
-
-.match-description {
+.resource-examples {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
+  margin: 0;
   line-height: 1.5;
 }
 
-.ai-recommendations {
-  list-style: none;
-  padding: 0;
-}
-
-.ai-recommendations li {
-  position: relative;
-  padding-left: var(--space-6);
-  margin-bottom: var(--space-3);
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-}
-
-.ai-recommendations li::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: var(--color-gold);
-}
-
-.networking-tips {
-  background: var(--gradient-gold-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-}
-
-.networking-tips h4 {
-  margin-bottom: var(--space-2);
-}
-
-.networking-tips p {
-  color: var(--color-text-primary);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-}
-
-.estimated-connections {
+.ai-total-resources {
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: var(--space-3);
-  background: var(--color-bg-tertiary);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  border: 1px solid var(--color-gold-muted);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  border: 2px solid var(--color-gold);
 }
 
-.estimated-connections .big-number {
-  font-size: var(--text-4xl);
+.ai-total-resources .total-number {
+  font-size: var(--text-5xl);
   font-weight: 700;
   color: var(--color-gold);
 }
 
-.estimated-connections .label {
-  font-size: var(--text-sm);
+.ai-total-resources .total-label {
+  font-size: var(--text-lg);
   color: var(--color-text-secondary);
 }
 
-.ai-powered-badge {
+.ai-cta {
   text-align: center;
-  margin-top: var(--space-6);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  letter-spacing: 0.5px;
+  padding: var(--space-4);
+  background: var(--gradient-gold-subtle);
+  border-radius: var(--radius-md);
+}
+
+.ai-cta p {
+  color: var(--color-gold-light);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-  .ai-result-header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .match-header {
+  .resource-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-1);
   }
 
-  .estimated-connections {
+  .ai-total-resources {
     flex-direction: column;
     align-items: center;
+    text-align: center;
+  }
+
+  .ai-highlight {
+    flex-direction: column;
     text-align: center;
   }
 }

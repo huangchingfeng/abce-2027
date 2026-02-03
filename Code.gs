@@ -314,93 +314,125 @@ function getBNIResourceDatabase() {
 function analyzeMatchmakingWithAI(userData) {
   const resourceDB = getBNIResourceDatabase();
 
-  // 構建 AI 分析 prompt
-  const prompt = `你是 ABCE 2027 商業媒合展的智慧媒合助手。根據以下用戶需求，分析並提供專業的商業媒合建議。
+  // 構建簡單的 AI prompt - 重點是展示資源、正面回應
+  const prompt = `你是 ABCE 2027 商業媒合展的熱情接待員。用戶提交了媒合需求，請用熱情、正面的語氣回應。
 
-## 用戶資料
-- 姓名：${userData.name || '未提供'}
-- 公司：${userData.company || '未提供'}
+## 用戶需求
 - 需要的資源：${Array.isArray(userData.resourceNeeded) ? userData.resourceNeeded.join('、') : (userData.resourceNeeded || '未指定')}
-- 資源詳細說明：${JSON.stringify(userData.resourceDetails || {})}
+- 詳細說明：${JSON.stringify(userData.resourceDetails || {})}
 - 想媒合的產業：${Array.isArray(userData.targetIndustries) ? userData.targetIndustries.join('、') : (userData.targetIndustries || '未指定')}
 - 自由描述：${userData.freeDescription || '無'}
 
-## BNI 華字輩資源庫統計
-- 總會員數：${resourceDB.totalMembers}+ 位企業主
-- 分會數：${resourceDB.totalChapters} 個分會
-- 產業分布：${Object.entries(resourceDB.industries).map(([k, v]) => `${k}(${v.count}人)`).join('、')}
+## 我們的資源（BNI 華字輩 24 分會）
+- 總會員數：2,000+ 位企業主
+- 產業分布：科技資訊(180人)、金融保險(150人)、製造業(120人)、建築營造(100人)、餐飲服務(90人)、醫療健康(85人)、教育培訓(75人)、法律會計(70人)、行銷廣告(65人)、物流運輸(60人)、零售貿易(55人)、不動產(50人)
 
-## 請提供以下分析（以 JSON 格式回覆）：
+## 回覆要求
+1. 一定要正面回應，展示我們有相關資源
+2. 即使用戶要的資源不完全符合，也要找出相關的資源推薦
+3. 語氣要熱情、專業、讓人期待
+4. 強調來參加活動就對了
+
+請用 JSON 格式回覆：
 {
-  "matchScore": 85,  // 媒合成功機率 (0-100)
-  "summary": "一句話總結媒合分析結果",
-  "potentialMatches": [
-    {
-      "category": "類別名稱",
-      "count": 數量,
-      "relevance": "high/medium/low",
-      "description": "為什麼這個類別適合"
-    }
-  ],
-  "recommendations": [
-    "具體建議1",
-    "具體建議2",
-    "具體建議3"
-  ],
-  "networkingTips": "參展當天的媒合策略建議",
-  "estimatedConnections": 預估可建立的有效連結數量
+  "greeting": "一句熱情的開場（20字內）",
+  "resourceMatch": "說明我們有哪些相關資源可以幫助他（50-80字）",
+  "highlight": "一個吸引人的亮點數據（例如：光是XX產業就有XX位企業主）",
+  "callToAction": "鼓勵參加的一句話（30字內）"
 }
 
-請確保回覆是純 JSON 格式，不要包含 markdown 標記。`;
+只回覆 JSON，不要其他文字。`;
 
   try {
     const aiResponse = callGemini(prompt);
 
-    // 嘗試解析 JSON 回應
-    let analysis;
+    // 解析 JSON 回應
+    let aiData;
     try {
-      // 清理可能的 markdown 標記
       const cleanedResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      analysis = JSON.parse(cleanedResponse);
+      aiData = JSON.parse(cleanedResponse);
     } catch (parseError) {
-      // 如果無法解析，返回原始文字
-      analysis = {
-        matchScore: 75,
-        summary: aiResponse.substring(0, 200),
-        potentialMatches: [],
-        recommendations: ['AI 分析完成，請聯繫我們獲取詳細報告'],
-        networkingTips: '建議提早到場，多參與交流活動',
-        estimatedConnections: 10
-      };
+      aiData = null;
     }
+
+    // 計算相關資源數量
+    const relatedResources = getRelatedResources(userData, resourceDB);
 
     return {
       success: true,
-      aiEnabled: true,
-      analysis: analysis,
-      resourceStats: resourceDB
+      aiEnabled: !!aiData,
+      greeting: aiData?.greeting || '太棒了！您來對地方了！',
+      resourceMatch: aiData?.resourceMatch || `在我們 2,000+ 位企業主的網絡中，有豐富的資源可以協助您。無論是尋找供應商、拓展通路，還是尋求合作夥伴，ABCE 商媒會都能幫您找到對的人！`,
+      highlight: aiData?.highlight || relatedResources.highlight,
+      callToAction: aiData?.callToAction || '期待在 ABCE 2027 與您相見！',
+      relatedResources: relatedResources.list,
+      totalResources: resourceDB.totalMembers
     };
   } catch (error) {
-    // AI 失敗時返回基本統計
+    // AI 失敗時返回預設正面回應
+    const relatedResources = getRelatedResources(userData, resourceDB);
+
     return {
       success: true,
       aiEnabled: false,
-      error: error.message,
-      analysis: {
-        matchScore: 70,
-        summary: '根據您的需求，我們在 BNI 華字輩 24 分會中有豐富的資源可供媒合',
-        potentialMatches: getBasicMatches(userData, resourceDB),
-        recommendations: [
-          '建議參加 ABCE 2027 商展，現場進行面對面媒合',
-          '可提前預約一對一商業媒合時段',
-          '歡迎加入 BNI 華字輩社群獲取更多資源'
-        ],
-        networkingTips: '建議準備簡短的自我介紹和名片，主動交流',
-        estimatedConnections: 15
-      },
-      resourceStats: resourceDB
+      greeting: '太棒了！您來對地方了！',
+      resourceMatch: `在我們 2,000+ 位企業主的網絡中，涵蓋 12 大產業類別，一定有您需要的資源。ABCE 商媒會將是您拓展人脈的最佳機會！`,
+      highlight: relatedResources.highlight,
+      callToAction: '期待在 ABCE 2027 與您相見！',
+      relatedResources: relatedResources.list,
+      totalResources: resourceDB.totalMembers
     };
   }
+}
+
+// 取得相關資源（根據用戶需求匹配）
+function getRelatedResources(userData, resourceDB) {
+  const results = [];
+  let highlight = '';
+
+  // 根據選擇的產業
+  if (userData.targetIndustries && Array.isArray(userData.targetIndustries)) {
+    userData.targetIndustries.forEach(industry => {
+      const industryMap = {
+        'FOOD': '餐飲服務',
+        'TECH': '科技資訊',
+        'FINANCE': '金融保險',
+        'MANUFACTURE': '製造業',
+        'CONSTRUCTION': '建築營造',
+        'HEALTH': '醫療健康',
+        'EDUCATION': '教育培訓',
+        'LEGAL': '法律會計',
+        'MARKETING': '行銷廣告',
+        'LOGISTICS': '物流運輸',
+        'TRADE': '零售貿易',
+        'REALESTATE': '不動產'
+      };
+      const industryName = industryMap[industry] || industry;
+      if (resourceDB.industries[industryName]) {
+        results.push({
+          name: industryName,
+          count: resourceDB.industries[industryName].count,
+          examples: resourceDB.industries[industryName].examples
+        });
+        if (!highlight) {
+          highlight = `光是${industryName}就有 ${resourceDB.industries[industryName].count}+ 位企業主！`;
+        }
+      }
+    });
+  }
+
+  // 如果沒有匹配到產業，顯示總資源
+  if (results.length === 0) {
+    // 預設顯示前 3 大產業
+    results.push(
+      { name: '科技資訊', count: 180, examples: resourceDB.industries['科技資訊'].examples },
+      { name: '金融保險', count: 150, examples: resourceDB.industries['金融保險'].examples },
+      { name: '製造業', count: 120, examples: resourceDB.industries['製造業'].examples }
+    );
+    highlight = '2,000+ 位企業主、12 大產業，總有您需要的資源！';
+  }
+
+  return { list: results, highlight: highlight };
 }
 
 // 基本媒合匹配（AI 失敗時的備用方案）
