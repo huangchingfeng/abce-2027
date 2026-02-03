@@ -313,18 +313,212 @@ function getBNIResourceDatabase() {
 // 智慧媒合分析
 function analyzeMatchmakingWithAI(userData) {
   const resourceDB = getBNIResourceDatabase();
-  const relatedResources = getRelatedResources(userData, resourceDB);
 
-  // 直接返回專業的資源展示，不需要 AI 生成
+  // 根據用戶需求生成客製化回應
+  const customResponse = generateCustomResponse(userData, resourceDB);
+
   return {
     success: true,
-    message: '感謝您的需求提交，我們已收到您的資料。',
-    summary: `ABCE 亞洲商媒會 24 分會擁有 2,000+ 位企業主資源，涵蓋 12 大產業。根據您的需求，以下是相關的資源統計：`,
-    relatedResources: relatedResources.list,
-    highlight: relatedResources.highlight,
+    message: customResponse.message,
+    summary: customResponse.summary,
+    relatedResources: customResponse.resources,
+    highlight: customResponse.highlight,
     totalResources: resourceDB.totalMembers,
-    closing: '歡迎參加 ABCE 2027，現場將有更多媒合機會。'
+    closing: customResponse.closing
   };
+}
+
+// 生成客製化回應（根據用戶填寫的資源需求）
+function generateCustomResponse(userData, resourceDB) {
+  const resourceNeeded = userData.resourceNeeded || [];
+  const resourceDetails = userData.resourceDetails || {};
+  const targetIndustries = userData.targetIndustries || [];
+  const freeDescription = userData.freeDescription || '';
+
+  // 資源類型對應的中文名稱和回應模板
+  const resourceMap = {
+    'SUPPLIER': {
+      name: '供應商',
+      response: '找供應商',
+      description: '原物料、設備、服務供應'
+    },
+    'BUYER': {
+      name: '買家/客戶',
+      response: '找客戶',
+      description: '企業採購、批發商、零售商'
+    },
+    'PARTNER': {
+      name: '合作夥伴',
+      response: '找合作夥伴',
+      description: '策略聯盟、技術合作、異業結盟'
+    },
+    'INVESTOR': {
+      name: '投資人',
+      response: '找投資人',
+      description: '天使投資、創投、企業投資'
+    },
+    'CHANNEL': {
+      name: '通路/代理',
+      response: '找通路',
+      description: '經銷商、代理商、電商平台'
+    },
+    'TALENT': {
+      name: '人才',
+      response: '找人才',
+      description: '業務、技術、管理人才'
+    },
+    'OTHER': {
+      name: '其他資源',
+      response: '找資源',
+      description: '其他商務資源'
+    }
+  };
+
+  // 產業代碼對應中文
+  const industryMap = {
+    'FOOD': '餐飲服務',
+    'TECH': '科技資訊',
+    'FINANCE': '金融保險',
+    'MANUFACTURE': '製造業',
+    'CONSTRUCTION': '建築營造',
+    'HEALTH': '醫療健康',
+    'EDUCATION': '教育培訓',
+    'LEGAL': '法律會計',
+    'MARKETING': '行銷廣告',
+    'LOGISTICS': '物流運輸',
+    'TRADE': '零售貿易',
+    'REALESTATE': '不動產'
+  };
+
+  let message = '';
+  let summary = '';
+  let resources = [];
+  let highlight = '';
+  let closing = '';
+
+  // 根據用戶選擇的資源類型生成客製化訊息
+  if (resourceNeeded.length > 0) {
+    // 收集用戶需要的資源名稱
+    const neededNames = resourceNeeded.map(r => resourceMap[r]?.name || r).filter(Boolean);
+
+    // 生成針對性的開場訊息
+    if (resourceNeeded.includes('SUPPLIER')) {
+      const detail = resourceDetails['SUPPLIER'] || '';
+      if (detail) {
+        message = `您需要「${detail}」相關的供應商，我們有相關資源可以協助。`;
+      } else {
+        message = '您需要供應商資源，ABCE 亞洲商媒會有超過 200 位供應商會員。';
+      }
+    } else if (resourceNeeded.includes('BUYER')) {
+      const detail = resourceDetails['BUYER'] || '';
+      if (detail) {
+        message = `您想找「${detail}」類型的客戶，這正是我們擅長的媒合領域。`;
+      } else {
+        message = '您需要開發客戶，我們的會員涵蓋各產業的企業主，都是潛在的買家。';
+      }
+    } else if (resourceNeeded.includes('INVESTOR')) {
+      const detail = resourceDetails['INVESTOR'] || '';
+      if (detail) {
+        message = `您正在尋找「${detail}」，ABCE 會員中有相關的投資資源。`;
+      } else {
+        message = '您需要投資人資源，我們有約 100 位具有投資能力或意願的會員。';
+      }
+    } else if (resourceNeeded.includes('PARTNER')) {
+      const detail = resourceDetails['PARTNER'] || '';
+      if (detail) {
+        message = `您想找「${detail}」的合作夥伴，商媒會是建立合作關係的好地方。`;
+      } else {
+        message = '您想找合作夥伴，ABCE 會員之間已促成許多策略聯盟。';
+      }
+    } else if (resourceNeeded.includes('CHANNEL')) {
+      const detail = resourceDetails['CHANNEL'] || '';
+      if (detail) {
+        message = `您需要「${detail}」通路資源，我們有經銷商、代理商會員可以媒合。`;
+      } else {
+        message = '您需要通路資源，ABCE 有約 180 位通路相關的會員。';
+      }
+    } else if (resourceNeeded.includes('TALENT')) {
+      const detail = resourceDetails['TALENT'] || '';
+      if (detail) {
+        message = `您需要「${detail}」，透過會員網絡可以接觸到合適的人才資源。`;
+      } else {
+        message = '您需要人才資源，ABCE 會員網絡可協助您找到合適的人才。';
+      }
+    } else {
+      const detail = resourceDetails['OTHER'] || freeDescription || '';
+      if (detail) {
+        message = `您的需求「${detail}」已記錄，我們會評估是否有合適的資源。`;
+      } else {
+        message = '感謝您的需求提交，我們會協助媒合合適的資源。';
+      }
+    }
+
+    // 如果有多種需求，補充說明
+    if (resourceNeeded.length > 1) {
+      summary = `您還需要${neededNames.slice(1).join('、')}等資源。ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
+    } else {
+      summary = `ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業，以下是相關統計：`;
+    }
+
+    // 根據需要的資源顯示對應的資源統計
+    resourceNeeded.forEach(resourceCode => {
+      if (resourceDB.resources[resourceCode]) {
+        resources.push({
+          name: resourceMap[resourceCode]?.name || resourceCode,
+          count: resourceDB.resources[resourceCode].count,
+          examples: resourceDB.resources[resourceCode].examples
+        });
+      }
+    });
+
+  } else if (freeDescription) {
+    // 只有自由描述，沒有勾選資源
+    message = `您的需求「${freeDescription.substring(0, 50)}${freeDescription.length > 50 ? '...' : ''}」已記錄。`;
+    summary = 'ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，我們會評估是否有合適的資源：';
+  } else {
+    // 什麼都沒填，只選了產業
+    message = '感謝您的需求提交，我們已收到您的資料。';
+    summary = 'ABCE 亞洲商媒會 24 分會、2,000+ 位企業主，涵蓋 12 大產業：';
+  }
+
+  // 根據目標產業補充資源列表
+  if (targetIndustries.length > 0) {
+    targetIndustries.forEach(industryCode => {
+      const industryName = industryMap[industryCode];
+      if (industryName && resourceDB.industries[industryName]) {
+        resources.push({
+          name: industryName,
+          count: resourceDB.industries[industryName].count,
+          examples: resourceDB.industries[industryName].examples
+        });
+        if (!highlight) {
+          highlight = `${industryName}有 ${resourceDB.industries[industryName].count}+ 位企業主`;
+        }
+      }
+    });
+  }
+
+  // 如果沒有任何匹配，顯示預設的三大產業
+  if (resources.length === 0) {
+    resources.push(
+      { name: '科技資訊', count: 180, examples: resourceDB.industries['科技資訊'].examples },
+      { name: '金融保險', count: 150, examples: resourceDB.industries['金融保險'].examples },
+      { name: '製造業', count: 120, examples: resourceDB.industries['製造業'].examples }
+    );
+  }
+
+  // 根據需求生成結語
+  if (resourceNeeded.includes('INVESTOR')) {
+    closing = '歡迎參加 ABCE 2027，現場將安排投資媒合專區。';
+  } else if (resourceNeeded.includes('BUYER')) {
+    closing = '歡迎參加 ABCE 2027，現場將有大量企業主等待認識您。';
+  } else if (resourceNeeded.includes('SUPPLIER')) {
+    closing = '歡迎參加 ABCE 2027，現場可直接與供應商會員交流。';
+  } else {
+    closing = '歡迎參加 ABCE 2027，現場將有更多媒合機會。';
+  }
+
+  return { message, summary, resources, highlight, closing };
 }
 
 // 取得相關資源（根據用戶需求匹配）
