@@ -10,7 +10,16 @@
  * 6. 設定「存取權」為「所有人」
  * 7. 點擊「部署」，複製網址
  * 8. 將網址貼到 admin.html 的設定欄位
+ *
+ * Gemini AI 設定：
+ * 1. 前往 https://aistudio.google.com/apikey 取得 API Key
+ * 2. 在下方 GEMINI_API_KEY 填入你的 API Key
  */
+
+// ===== Gemini AI 設定 =====
+const GEMINI_API_KEY = ''; // 請填入你的 Gemini API Key
+const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
 // 取得試算表（自動取得綁定的試算表）
 function getSpreadsheet() {
@@ -49,11 +58,15 @@ const BOOTH_HEADERS = [
 // 處理 GET 請求
 function doGet(e) {
   const action = e.parameter.action || 'test';
+  const callback = e.parameter.callback; // JSONP callback
 
   try {
+    let result;
+
     switch (action) {
       case 'test':
-        return jsonResponse({ success: true, message: 'API 連線成功！' });
+        result = { success: true, message: 'API 連線成功！' };
+        break;
 
       case 'getAll':
         return getAllData();
@@ -64,11 +77,39 @@ function doGet(e) {
       case 'getBooth':
         return getSheetData('攤位申請', BOOTH_HEADERS);
 
+      case 'analyzeMatchmaking':
+        // AI 智慧媒合分析（JSONP 方式）
+        const userData = {
+          name: e.parameter.name || '',
+          company: e.parameter.company || '',
+          resourceNeeded: e.parameter.resourceNeeded ? e.parameter.resourceNeeded.split(',') : [],
+          resourceDetails: e.parameter.resourceDetails ? JSON.parse(decodeURIComponent(e.parameter.resourceDetails)) : {},
+          targetIndustries: e.parameter.targetIndustries ? e.parameter.targetIndustries.split(',') : [],
+          freeDescription: e.parameter.freeDescription || ''
+        };
+        result = analyzeMatchmakingWithAI(userData);
+        break;
+
       default:
-        return jsonResponse({ success: false, error: '未知的 action' });
+        result = { success: false, error: '未知的 action' };
     }
+
+    // 支援 JSONP
+    if (callback) {
+      return ContentService
+        .createTextOutput(callback + '(' + JSON.stringify(result) + ')')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+
+    return jsonResponse(result);
   } catch (error) {
-    return jsonResponse({ success: false, error: error.message });
+    const errorResult = { success: false, error: error.message };
+    if (callback) {
+      return ContentService
+        .createTextOutput(callback + '(' + JSON.stringify(errorResult) + ')')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return jsonResponse(errorResult);
   }
 }
 
@@ -79,14 +120,23 @@ function doPost(e) {
     const type = data.type || 'matchmaking';
 
     if (type === 'matchmaking') {
+      // 儲存表單資料
       saveMatchmaking(data);
+
+      // 執行智慧媒合分析
+      const aiResult = analyzeMatchmakingWithAI(data);
+
+      return jsonResponse({
+        success: true,
+        message: '資料已儲存',
+        matchmaking: aiResult
+      });
     } else if (type === 'booth') {
       saveBooth(data);
+      return jsonResponse({ success: true, message: '資料已儲存' });
     } else {
       return jsonResponse({ success: false, error: '未知的表單類型' });
     }
-
-    return jsonResponse({ success: true, message: '資料已儲存' });
   } catch (error) {
     return jsonResponse({ success: false, error: error.message });
   }
@@ -186,6 +236,206 @@ function jsonResponse(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ===== Gemini AI 智慧媒合 =====
+
+// 呼叫 Gemini API
+function callGemini(prompt) {
+  if (!GEMINI_API_KEY) {
+    throw new Error('Gemini API Key 未設定');
+  }
+
+  const url = `${GEMINI_API_URL}${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+  const payload = {
+    contents: [{
+      parts: [{
+        text: prompt
+      }]
+    }],
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 2048
+    }
+  };
+
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
+
+  const response = UrlFetchApp.fetch(url, options);
+  const result = JSON.parse(response.getContentText());
+
+  if (result.error) {
+    throw new Error(result.error.message);
+  }
+
+  return result.candidates[0].content.parts[0].text;
+}
+
+// 取得 BNI 會員資源庫（模擬數據，實際可連接真實資料）
+function getBNIResourceDatabase() {
+  // 這是 BNI 華字輩 24 分會的資源庫模擬數據
+  // 實際可以從另一個 Google Sheet 讀取真實會員資料
+  return {
+    industries: {
+      '科技資訊': { count: 180, examples: ['軟體開發', '系統整合', 'AI 解決方案', '雲端服務'] },
+      '金融保險': { count: 150, examples: ['壽險', '產險', '財務規劃', '投資顧問'] },
+      '製造業': { count: 120, examples: ['精密零件', '電子製造', '機械設備', '包裝材料'] },
+      '建築營造': { count: 100, examples: ['室內設計', '工程營造', '建材供應', '水電工程'] },
+      '餐飲服務': { count: 90, examples: ['餐廳經營', '食材供應', '餐飲設備', '外燴服務'] },
+      '醫療健康': { count: 85, examples: ['診所', '醫療器材', '健康食品', '長照服務'] },
+      '教育培訓': { count: 75, examples: ['企業培訓', '語言教學', '技能認證', '親子教育'] },
+      '法律會計': { count: 70, examples: ['律師事務所', '會計師事務所', '稅務規劃', '商標專利'] },
+      '行銷廣告': { count: 65, examples: ['數位行銷', '廣告設計', '公關活動', '影片製作'] },
+      '物流運輸': { count: 60, examples: ['貨運物流', '倉儲服務', '報關行', '快遞服務'] },
+      '零售貿易': { count: 55, examples: ['進出口貿易', '批發零售', '電商平台', '代理經銷'] },
+      '不動產': { count: 50, examples: ['房屋仲介', '商辦租賃', '物業管理', '土地開發'] }
+    },
+    resources: {
+      'SUPPLIER': { count: 200, description: '供應商資源', examples: ['原物料供應', '設備供應', '服務供應'] },
+      'CHANNEL': { count: 180, description: '銷售通路', examples: ['經銷商', '代理商', '零售通路', '電商平台'] },
+      'TALENT': { count: 150, description: '人才資源', examples: ['技術人才', '業務人才', '管理人才', '專業顧問'] },
+      'FUNDING': { count: 100, description: '資金資源', examples: ['投資人', '創投', '銀行融資', '政府補助'] },
+      'TECH': { count: 120, description: '技術合作', examples: ['技術授權', '聯合研發', '顧問諮詢', '系統整合'] },
+      'MARKET': { count: 90, description: '市場拓展', examples: ['海外市場', 'B2B客戶', '政府標案', '大型企業'] },
+      'OTHER': { count: 500, description: '其他資源', examples: ['異業合作', '策略聯盟', '資源共享'] }
+    },
+    totalMembers: 2000,
+    totalChapters: 24
+  };
+}
+
+// 智慧媒合分析
+function analyzeMatchmakingWithAI(userData) {
+  const resourceDB = getBNIResourceDatabase();
+
+  // 構建 AI 分析 prompt
+  const prompt = `你是 ABCE 2027 商業媒合展的智慧媒合助手。根據以下用戶需求，分析並提供專業的商業媒合建議。
+
+## 用戶資料
+- 姓名：${userData.name || '未提供'}
+- 公司：${userData.company || '未提供'}
+- 需要的資源：${Array.isArray(userData.resourceNeeded) ? userData.resourceNeeded.join('、') : (userData.resourceNeeded || '未指定')}
+- 資源詳細說明：${JSON.stringify(userData.resourceDetails || {})}
+- 想媒合的產業：${Array.isArray(userData.targetIndustries) ? userData.targetIndustries.join('、') : (userData.targetIndustries || '未指定')}
+- 自由描述：${userData.freeDescription || '無'}
+
+## BNI 華字輩資源庫統計
+- 總會員數：${resourceDB.totalMembers}+ 位企業主
+- 分會數：${resourceDB.totalChapters} 個分會
+- 產業分布：${Object.entries(resourceDB.industries).map(([k, v]) => `${k}(${v.count}人)`).join('、')}
+
+## 請提供以下分析（以 JSON 格式回覆）：
+{
+  "matchScore": 85,  // 媒合成功機率 (0-100)
+  "summary": "一句話總結媒合分析結果",
+  "potentialMatches": [
+    {
+      "category": "類別名稱",
+      "count": 數量,
+      "relevance": "high/medium/low",
+      "description": "為什麼這個類別適合"
+    }
+  ],
+  "recommendations": [
+    "具體建議1",
+    "具體建議2",
+    "具體建議3"
+  ],
+  "networkingTips": "參展當天的媒合策略建議",
+  "estimatedConnections": 預估可建立的有效連結數量
+}
+
+請確保回覆是純 JSON 格式，不要包含 markdown 標記。`;
+
+  try {
+    const aiResponse = callGemini(prompt);
+
+    // 嘗試解析 JSON 回應
+    let analysis;
+    try {
+      // 清理可能的 markdown 標記
+      const cleanedResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      analysis = JSON.parse(cleanedResponse);
+    } catch (parseError) {
+      // 如果無法解析，返回原始文字
+      analysis = {
+        matchScore: 75,
+        summary: aiResponse.substring(0, 200),
+        potentialMatches: [],
+        recommendations: ['AI 分析完成，請聯繫我們獲取詳細報告'],
+        networkingTips: '建議提早到場，多參與交流活動',
+        estimatedConnections: 10
+      };
+    }
+
+    return {
+      success: true,
+      aiEnabled: true,
+      analysis: analysis,
+      resourceStats: resourceDB
+    };
+  } catch (error) {
+    // AI 失敗時返回基本統計
+    return {
+      success: true,
+      aiEnabled: false,
+      error: error.message,
+      analysis: {
+        matchScore: 70,
+        summary: '根據您的需求，我們在 BNI 華字輩 24 分會中有豐富的資源可供媒合',
+        potentialMatches: getBasicMatches(userData, resourceDB),
+        recommendations: [
+          '建議參加 ABCE 2027 商展，現場進行面對面媒合',
+          '可提前預約一對一商業媒合時段',
+          '歡迎加入 BNI 華字輩社群獲取更多資源'
+        ],
+        networkingTips: '建議準備簡短的自我介紹和名片，主動交流',
+        estimatedConnections: 15
+      },
+      resourceStats: resourceDB
+    };
+  }
+}
+
+// 基本媒合匹配（AI 失敗時的備用方案）
+function getBasicMatches(userData, resourceDB) {
+  const matches = [];
+
+  // 根據選擇的產業匹配
+  if (userData.targetIndustries && Array.isArray(userData.targetIndustries)) {
+    userData.targetIndustries.forEach(industry => {
+      if (resourceDB.industries[industry]) {
+        matches.push({
+          category: industry,
+          count: resourceDB.industries[industry].count,
+          relevance: 'high',
+          description: `${resourceDB.industries[industry].examples.join('、')}等相關會員`
+        });
+      }
+    });
+  }
+
+  // 根據需要的資源匹配
+  if (userData.resourceNeeded && Array.isArray(userData.resourceNeeded)) {
+    userData.resourceNeeded.forEach(resource => {
+      if (resourceDB.resources[resource]) {
+        matches.push({
+          category: resourceDB.resources[resource].description,
+          count: resourceDB.resources[resource].count,
+          relevance: 'medium',
+          description: resourceDB.resources[resource].examples.join('、')
+        });
+      }
+    });
+  }
+
+  return matches.slice(0, 5); // 最多返回 5 個匹配
 }
 
 // 測試函數（可在 Apps Script 編輯器中執行）

@@ -30,6 +30,68 @@ async function sendToBackend(data) {
   }
 }
 
+// JSONP 請求（用於獲取 AI 分析結果）
+function fetchJSONP(url, callbackName) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('JSONP request timeout'));
+    }, 30000); // 30 秒超時
+
+    window[callbackName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[callbackName];
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    }
+
+    script.src = url;
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('JSONP request failed'));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+// 獲取 AI 媒合分析
+async function getAIMatchmakingAnalysis(userData) {
+  if (!ABCE_CONFIG.API_URL) {
+    return null;
+  }
+
+  const callbackName = 'aiMatchCallback_' + Date.now();
+  const params = new URLSearchParams({
+    action: 'analyzeMatchmaking',
+    callback: callbackName,
+    name: userData.name || '',
+    company: userData.company || '',
+    resourceNeeded: (userData.resourceNeeded || []).join(','),
+    resourceDetails: encodeURIComponent(JSON.stringify(userData.resourceDetails || {})),
+    targetIndustries: (userData.targetIndustries || []).join(','),
+    freeDescription: userData.freeDescription || ''
+  });
+
+  const url = `${ABCE_CONFIG.API_URL}?${params.toString()}`;
+
+  try {
+    const result = await fetchJSONP(url, callbackName);
+    console.log('AI Analysis result:', result);
+    return result;
+  } catch (error) {
+    console.error('AI Analysis error:', error);
+    return null;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize i18n
   window.i18n.initLanguage();
@@ -261,11 +323,12 @@ function initForms() {
   });
 }
 
-function handleMatchmakingSubmit(e) {
+async function handleMatchmakingSubmit(e) {
   e.preventDefault();
 
   const form = e.target;
   const formData = new FormData(form);
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   const targetIndustries = formData.getAll('targetIndustries');
   const resourceNeeded = formData.getAll('resourceNeeded');
@@ -308,11 +371,26 @@ function handleMatchmakingSubmit(e) {
 
   console.log('Matchmaking submission:', data);
 
-  // 發送到後台
+  // 顯示 loading 狀態
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = window.i18n.getCurrentLang() === 'zh' ? '🤖 AI 分析中...' : '🤖 AI Analyzing...';
+
+  // 發送到後台儲存
   sendToBackend(data);
 
-  // 根據填寫內容顯示結果
-  if (hasIndustry) {
+  // 獲取 AI 分析結果
+  const aiResult = await getAIMatchmakingAnalysis(data);
+
+  // 恢復按鈕狀態
+  submitBtn.disabled = false;
+  submitBtn.textContent = originalBtnText;
+
+  // 顯示結果
+  if (aiResult && aiResult.success) {
+    showAIMatchmakingResult(aiResult);
+  } else if (hasIndustry) {
+    // AI 分析失敗時，使用靜態結果
     showMatchmakingResult(targetIndustries);
   } else {
     showMatchmakingResultGeneral();
@@ -339,6 +417,151 @@ function showMatchmakingResultGeneral() {
       </span>
     </div>
   `;
+  modal.classList.add('active');
+}
+
+// 顯示 AI 智慧媒合結果
+function showAIMatchmakingResult(aiResult) {
+  const modal = document.getElementById('matchmakingResult');
+  const statsContainer = document.getElementById('resultStats');
+  const analysis = aiResult.analysis || {};
+  const lang = window.i18n.getCurrentLang();
+
+  // 多語言文字
+  const texts = {
+    zh: {
+      matchScore: '媒合成功率',
+      aiAnalysis: '🤖 AI 智慧分析',
+      potentialMatches: '潛在媒合對象',
+      recommendations: '💡 AI 建議',
+      networkingTips: '🎯 參展策略',
+      estimatedConnections: '預估有效連結',
+      connections: '個商業連結',
+      resourceAvailable: '位企業主資源',
+      relevanceHigh: '高度相關',
+      relevanceMedium: '中度相關',
+      relevanceLow: '一般相關',
+      aiPowered: '由 Gemini AI 提供智慧分析'
+    },
+    en: {
+      matchScore: 'Match Success Rate',
+      aiAnalysis: '🤖 AI Analysis',
+      potentialMatches: 'Potential Matches',
+      recommendations: '💡 AI Recommendations',
+      networkingTips: '🎯 Networking Strategy',
+      estimatedConnections: 'Estimated Connections',
+      connections: 'business connections',
+      resourceAvailable: 'business owners',
+      relevanceHigh: 'High relevance',
+      relevanceMedium: 'Medium relevance',
+      relevanceLow: 'Low relevance',
+      aiPowered: 'Powered by Gemini AI'
+    },
+    ja: {
+      matchScore: 'マッチング成功率',
+      aiAnalysis: '🤖 AI分析',
+      potentialMatches: '潜在的なマッチング',
+      recommendations: '💡 AIの提案',
+      networkingTips: '🎯 展示会戦略',
+      estimatedConnections: '予想されるコネクション',
+      connections: '件のビジネス接続',
+      resourceAvailable: '名の経営者',
+      relevanceHigh: '高い関連性',
+      relevanceMedium: '中程度の関連性',
+      relevanceLow: '一般的な関連性',
+      aiPowered: 'Gemini AIによる分析'
+    },
+    ko: {
+      matchScore: '매칭 성공률',
+      aiAnalysis: '🤖 AI 분석',
+      potentialMatches: '잠재적 매칭',
+      recommendations: '💡 AI 추천',
+      networkingTips: '🎯 네트워킹 전략',
+      estimatedConnections: '예상 연결',
+      connections: '개의 비즈니스 연결',
+      resourceAvailable: '명의 기업주',
+      relevanceHigh: '높은 관련성',
+      relevanceMedium: '중간 관련성',
+      relevanceLow: '낮은 관련성',
+      aiPowered: 'Gemini AI 분석 제공'
+    }
+  };
+
+  const t = texts[lang] || texts.en;
+
+  // 生成媒合結果 HTML
+  let html = '';
+
+  // 媒合成功率圓餅圖
+  const matchScore = analysis.matchScore || 75;
+  html += `
+    <div class="ai-result-header">
+      <div class="match-score-circle" style="--score: ${matchScore}">
+        <span class="score-number">${matchScore}%</span>
+        <span class="score-label">${t.matchScore}</span>
+      </div>
+      <div class="ai-summary">
+        <h4>${t.aiAnalysis}</h4>
+        <p>${analysis.summary || ''}</p>
+      </div>
+    </div>
+  `;
+
+  // 潛在媒合對象
+  if (analysis.potentialMatches && analysis.potentialMatches.length > 0) {
+    html += `<div class="ai-section"><h4>${t.potentialMatches}</h4><div class="potential-matches">`;
+    analysis.potentialMatches.forEach(match => {
+      const relevanceClass = match.relevance === 'high' ? 'high' : (match.relevance === 'medium' ? 'medium' : 'low');
+      const relevanceText = match.relevance === 'high' ? t.relevanceHigh : (match.relevance === 'medium' ? t.relevanceMedium : t.relevanceLow);
+      html += `
+        <div class="match-item ${relevanceClass}">
+          <div class="match-header">
+            <span class="match-category">${match.category}</span>
+            <span class="match-count">${match.count}+ ${t.resourceAvailable}</span>
+          </div>
+          <div class="match-relevance">${relevanceText}</div>
+          <p class="match-description">${match.description}</p>
+        </div>
+      `;
+    });
+    html += `</div></div>`;
+  }
+
+  // AI 建議
+  if (analysis.recommendations && analysis.recommendations.length > 0) {
+    html += `<div class="ai-section"><h4>${t.recommendations}</h4><ul class="ai-recommendations">`;
+    analysis.recommendations.forEach(rec => {
+      html += `<li>${rec}</li>`;
+    });
+    html += `</ul></div>`;
+  }
+
+  // 參展策略
+  if (analysis.networkingTips) {
+    html += `
+      <div class="ai-section networking-tips">
+        <h4>${t.networkingTips}</h4>
+        <p>${analysis.networkingTips}</p>
+      </div>
+    `;
+  }
+
+  // 預估連結數
+  if (analysis.estimatedConnections) {
+    html += `
+      <div class="ai-section estimated-connections">
+        <span class="big-number">${analysis.estimatedConnections}+</span>
+        <span class="label">${t.estimatedConnections}</span>
+      </div>
+    `;
+  }
+
+  // AI 標記
+  if (aiResult.aiEnabled) {
+    html += `<div class="ai-powered-badge">✨ ${t.aiPowered}</div>`;
+  }
+
+  statsContainer.innerHTML = html;
   modal.classList.add('active');
 }
 

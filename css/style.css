@@ -1743,3 +1743,234 @@ button {
     margin-left: 0;
   }
 }
+
+/* ===== AI Matchmaking Result Styles ===== */
+.ai-result-header {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.match-score-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-gold) calc(var(--score) * 1%),
+    var(--color-bg-tertiary) calc(var(--score) * 1%)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.match-score-circle::before {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-bg-card);
+}
+
+.match-score-circle .score-number {
+  position: relative;
+  z-index: 1;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.match-score-circle .score-label {
+  position: relative;
+  z-index: 1;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.ai-summary {
+  flex: 1;
+}
+
+.ai-summary h4 {
+  color: var(--color-gold);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+
+.ai-summary p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.ai-section {
+  margin-bottom: var(--space-6);
+}
+
+.ai-section h4 {
+  color: var(--color-gold-light);
+  font-size: var(--text-base);
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+}
+
+.potential-matches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.match-item {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border-left: 4px solid var(--color-border);
+  transition: var(--transition-base);
+}
+
+.match-item.high {
+  border-left-color: #4ade80;
+}
+
+.match-item.medium {
+  border-left-color: var(--color-gold);
+}
+
+.match-item.low {
+  border-left-color: var(--color-text-tertiary);
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.match-category {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+}
+
+.match-count {
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+.match-relevance {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.match-item.high .match-relevance {
+  color: #4ade80;
+}
+
+.match-item.medium .match-relevance {
+  color: var(--color-gold);
+}
+
+.match-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.ai-recommendations {
+  list-style: none;
+  padding: 0;
+}
+
+.ai-recommendations li {
+  position: relative;
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.ai-recommendations li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-gold);
+}
+
+.networking-tips {
+  background: var(--gradient-gold-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.networking-tips h4 {
+  margin-bottom: var(--space-2);
+}
+
+.networking-tips p {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.estimated-connections {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border: 1px solid var(--color-gold-muted);
+}
+
+.estimated-connections .big-number {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.estimated-connections .label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.ai-powered-badge {
+  text-align: center;
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  .ai-result-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .match-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .estimated-connections {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
