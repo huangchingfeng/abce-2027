@@ -508,12 +508,10 @@ function generateCustomResponse(userData, resourceDB) {
   }
 
   // 根據需求生成結語
-  if (resourceNeeded.includes('INVESTOR')) {
-    closing = '歡迎參加 ABCE 2027，現場將安排投資媒合專區。';
-  } else if (resourceNeeded.includes('BUYER')) {
+  if (resourceNeeded.includes('BUYER')) {
     closing = '歡迎參加 ABCE 2027，現場將有大量企業主等待認識您。';
   } else if (resourceNeeded.includes('SUPPLIER')) {
-    closing = '歡迎參加 ABCE 2027，現場可直接與供應商會員交流。';
+    closing = '歡迎參加 ABCE 2027，現場可直接與供應商企業主交流。';
   } else {
     closing = '歡迎參加 ABCE 2027，現場將有更多媒合機會。';
   }
