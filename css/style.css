@@ -987,7 +987,9 @@ button {
 }
 
 .contact-type-select {
-  width: 140px;
+  width: 120px !important;
+  min-width: 120px;
+  max-width: 120px;
   flex-shrink: 0;
   padding: var(--space-3) var(--space-4);
   background: var(--color-bg-tertiary);
