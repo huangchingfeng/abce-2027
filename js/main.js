@@ -420,7 +420,7 @@ function showMatchmakingResultGeneral() {
   modal.classList.add('active');
 }
 
-// 顯示 AI 智慧媒合結果（簡化版 - 資源展示 + 正面回應）
+// 顯示媒合結果（專業版 - 資源統計展示）
 function showAIMatchmakingResult(aiResult) {
   const modal = document.getElementById('matchmakingResult');
   const statsContainer = document.getElementById('resultStats');
@@ -428,43 +428,26 @@ function showAIMatchmakingResult(aiResult) {
 
   // 多語言文字
   const texts = {
-    zh: { resourceAvailable: '位企業主', relatedIndustries: '相關產業資源' },
-    en: { resourceAvailable: 'business owners', relatedIndustries: 'Related Industries' },
-    ja: { resourceAvailable: '名の経営者', relatedIndustries: '関連産業' },
-    ko: { resourceAvailable: '명의 기업주', relatedIndustries: '관련 산업' }
+    zh: { resourceAvailable: '位企業主', relatedIndustries: '相關產業資源', total: '總資源' },
+    en: { resourceAvailable: 'business owners', relatedIndustries: 'Related Industries', total: 'Total Resources' },
+    ja: { resourceAvailable: '名の経営者', relatedIndustries: '関連産業', total: '総リソース' },
+    ko: { resourceAvailable: '명의 기업주', relatedIndustries: '관련 산업', total: '총 리소스' }
   };
   const t = texts[lang] || texts.en;
 
   let html = '';
 
-  // 熱情開場
-  html += `
-    <div class="ai-greeting">
-      <span class="greeting-icon">🎉</span>
-      <h3>${aiResult.greeting || '太棒了！您來對地方了！'}</h3>
-    </div>
-  `;
+  // 訊息
+  html += `<div class="result-message"><p>${aiResult.message || ''}</p></div>`;
 
-  // 資源說明
-  html += `
-    <div class="ai-resource-match">
-      <p>${aiResult.resourceMatch || ''}</p>
-    </div>
-  `;
-
-  // 亮點數據
-  if (aiResult.highlight) {
-    html += `
-      <div class="ai-highlight">
-        <span class="highlight-icon">✨</span>
-        <span class="highlight-text">${aiResult.highlight}</span>
-      </div>
-    `;
+  // 說明
+  if (aiResult.summary) {
+    html += `<div class="result-summary"><p>${aiResult.summary}</p></div>`;
   }
 
   // 相關產業資源列表
   if (aiResult.relatedResources && aiResult.relatedResources.length > 0) {
-    html += `<div class="ai-section"><h4>📊 ${t.relatedIndustries}</h4><div class="resource-list">`;
+    html += `<div class="result-section"><h4>${t.relatedIndustries}</h4><div class="resource-list">`;
     aiResult.relatedResources.forEach(resource => {
       html += `
         <div class="resource-item">
@@ -481,18 +464,17 @@ function showAIMatchmakingResult(aiResult) {
 
   // 總資源數
   html += `
-    <div class="ai-total-resources">
+    <div class="result-total">
+      <span class="total-label">${t.total}</span>
       <span class="total-number">${aiResult.totalResources || '2,000'}+</span>
-      <span class="total-label">${t.resourceAvailable}</span>
+      <span class="total-unit">${t.resourceAvailable}</span>
     </div>
   `;
 
-  // 行動呼籲
-  html += `
-    <div class="ai-cta">
-      <p>${aiResult.callToAction || '期待在 ABCE 2027 與您相見！'}</p>
-    </div>
-  `;
+  // 結語
+  if (aiResult.closing) {
+    html += `<div class="result-closing"><p>${aiResult.closing}</p></div>`;
+  }
 
   statsContainer.innerHTML = html;
   modal.classList.add('active');

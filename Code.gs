@@ -313,76 +313,18 @@ function getBNIResourceDatabase() {
 // 智慧媒合分析
 function analyzeMatchmakingWithAI(userData) {
   const resourceDB = getBNIResourceDatabase();
+  const relatedResources = getRelatedResources(userData, resourceDB);
 
-  // 構建簡單的 AI prompt - 重點是展示資源、正面回應
-  const prompt = `你是 ABCE 2027 商業媒合展的熱情接待員。用戶提交了媒合需求，請用熱情、正面的語氣回應。
-
-## 用戶需求
-- 需要的資源：${Array.isArray(userData.resourceNeeded) ? userData.resourceNeeded.join('、') : (userData.resourceNeeded || '未指定')}
-- 詳細說明：${JSON.stringify(userData.resourceDetails || {})}
-- 想媒合的產業：${Array.isArray(userData.targetIndustries) ? userData.targetIndustries.join('、') : (userData.targetIndustries || '未指定')}
-- 自由描述：${userData.freeDescription || '無'}
-
-## 我們的資源（BNI 華字輩 24 分會）
-- 總會員數：2,000+ 位企業主
-- 產業分布：科技資訊(180人)、金融保險(150人)、製造業(120人)、建築營造(100人)、餐飲服務(90人)、醫療健康(85人)、教育培訓(75人)、法律會計(70人)、行銷廣告(65人)、物流運輸(60人)、零售貿易(55人)、不動產(50人)
-
-## 回覆要求
-1. 一定要正面回應，展示我們有相關資源
-2. 即使用戶要的資源不完全符合，也要找出相關的資源推薦
-3. 語氣要熱情、專業、讓人期待
-4. 強調來參加活動就對了
-
-請用 JSON 格式回覆：
-{
-  "greeting": "一句熱情的開場（20字內）",
-  "resourceMatch": "說明我們有哪些相關資源可以幫助他（50-80字）",
-  "highlight": "一個吸引人的亮點數據（例如：光是XX產業就有XX位企業主）",
-  "callToAction": "鼓勵參加的一句話（30字內）"
-}
-
-只回覆 JSON，不要其他文字。`;
-
-  try {
-    const aiResponse = callGemini(prompt);
-
-    // 解析 JSON 回應
-    let aiData;
-    try {
-      const cleanedResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      aiData = JSON.parse(cleanedResponse);
-    } catch (parseError) {
-      aiData = null;
-    }
-
-    // 計算相關資源數量
-    const relatedResources = getRelatedResources(userData, resourceDB);
-
-    return {
-      success: true,
-      aiEnabled: !!aiData,
-      greeting: aiData?.greeting || '太棒了！您來對地方了！',
-      resourceMatch: aiData?.resourceMatch || `在我們 2,000+ 位企業主的網絡中，有豐富的資源可以協助您。無論是尋找供應商、拓展通路，還是尋求合作夥伴，ABCE 商媒會都能幫您找到對的人！`,
-      highlight: aiData?.highlight || relatedResources.highlight,
-      callToAction: aiData?.callToAction || '期待在 ABCE 2027 與您相見！',
-      relatedResources: relatedResources.list,
-      totalResources: resourceDB.totalMembers
-    };
-  } catch (error) {
-    // AI 失敗時返回預設正面回應
-    const relatedResources = getRelatedResources(userData, resourceDB);
-
-    return {
-      success: true,
-      aiEnabled: false,
-      greeting: '太棒了！您來對地方了！',
-      resourceMatch: `在我們 2,000+ 位企業主的網絡中，涵蓋 12 大產業類別，一定有您需要的資源。ABCE 商媒會將是您拓展人脈的最佳機會！`,
-      highlight: relatedResources.highlight,
-      callToAction: '期待在 ABCE 2027 與您相見！',
-      relatedResources: relatedResources.list,
-      totalResources: resourceDB.totalMembers
-    };
-  }
+  // 直接返回專業的資源展示，不需要 AI 生成
+  return {
+    success: true,
+    message: '感謝您的需求提交，我們已收到您的資料。',
+    summary: `BNI 華字輩 24 分會擁有 2,000+ 位企業主資源，涵蓋 12 大產業。根據您的需求，以下是相關的資源統計：`,
+    relatedResources: relatedResources.list,
+    highlight: relatedResources.highlight,
+    totalResources: resourceDB.totalMembers,
+    closing: '歡迎參加 ABCE 2027，現場將有更多媒合機會。'
+  };
 }
 
 // 取得相關資源（根據用戶需求匹配）
