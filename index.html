@@ -261,10 +261,52 @@
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="mm-contact" data-i18n="form.contact">LINE ID 或電話 <span class="required">*</span></label>
-              <input type="text" id="mm-contact" name="contact" required placeholder="方便聯繫的方式">
+          <div class="form-group">
+            <label data-i18n="form.contactMethod">聯絡方式 <span class="required">*</span></label>
+            <div class="contact-input-group">
+              <select name="contactType" id="mm-contact-type" class="contact-type-select">
+                <option value="LINE">LINE</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Phone">電話</option>
+              </select>
+              <input type="text" id="mm-contact" name="contact" required placeholder="請輸入您的 ID 或號碼">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="form.resourceNeeded">需要的資源 <span class="required">*</span></label>
+            <div class="resource-input-wrapper">
+              <div class="checkbox-grid checkbox-grid-simple" id="resourceCheckboxes">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="SUPPLIER">
+                  <span data-i18n="resource.supplier">供應商</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="BUYER">
+                  <span data-i18n="resource.buyer">買家/客戶</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="PARTNER">
+                  <span data-i18n="resource.partner">合作夥伴</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="INVESTOR">
+                  <span data-i18n="resource.investor">投資人</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="CHANNEL">
+                  <span data-i18n="resource.channel">通路/代理</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="resourceNeeded" value="TALENT">
+                  <span data-i18n="resource.talent">人才</span>
+                </label>
+                <label class="checkbox-label resource-other-label">
+                  <input type="checkbox" name="resourceNeeded" value="OTHER" id="resourceOtherCheck">
+                  <span data-i18n="resource.other">其他</span>
+                </label>
+              </div>
+              <input type="text" id="resourceOtherText" name="resourceOtherText" class="resource-other-input" placeholder="請說明您需要的資源..." style="display: none;">
             </div>
           </div>
 

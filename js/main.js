@@ -213,6 +213,18 @@ function initForms() {
   if (boothForm) {
     boothForm.addEventListener('submit', handleBoothSubmit);
   }
+
+  // Handle "Other" checkbox toggle for resource input
+  const resourceOtherCheck = document.getElementById('resourceOtherCheck');
+  const resourceOtherText = document.getElementById('resourceOtherText');
+  if (resourceOtherCheck && resourceOtherText) {
+    resourceOtherCheck.addEventListener('change', () => {
+      resourceOtherText.style.display = resourceOtherCheck.checked ? 'block' : 'none';
+      if (resourceOtherCheck.checked) {
+        resourceOtherText.focus();
+      }
+    });
+  }
 }
 
 function handleMatchmakingSubmit(e) {
@@ -222,6 +234,15 @@ function handleMatchmakingSubmit(e) {
   const formData = new FormData(form);
 
   const targetIndustries = formData.getAll('targetIndustries');
+  const resourceNeeded = formData.getAll('resourceNeeded');
+
+  if (resourceNeeded.length === 0) {
+    alert(window.i18n.getCurrentLang() === 'zh'
+      ? '請至少選擇一個需要的資源'
+      : 'Please select at least one resource needed');
+    return;
+  }
+
   if (targetIndustries.length === 0) {
     alert(window.i18n.getCurrentLang() === 'zh'
       ? '請至少選擇一個想媒合的產業'
@@ -232,7 +253,10 @@ function handleMatchmakingSubmit(e) {
   const data = {
     name: formData.get('name'),
     company: formData.get('company'),
+    contactType: formData.get('contactType'),
     contact: formData.get('contact'),
+    resourceNeeded: resourceNeeded,
+    resourceOtherText: formData.get('resourceOtherText') || '',
     targetIndustries: targetIndustries,
     language: window.i18n.getCurrentLang(),
     submittedAt: new Date().toISOString()
@@ -241,6 +265,9 @@ function handleMatchmakingSubmit(e) {
   console.log('Matchmaking submission:', data);
   showMatchmakingResult(targetIndustries);
   form.reset();
+  // Hide the other text input after reset
+  const resourceOtherText = document.getElementById('resourceOtherText');
+  if (resourceOtherText) resourceOtherText.style.display = 'none';
 }
 
 function showMatchmakingResult(targetIndustries) {
