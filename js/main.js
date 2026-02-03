@@ -1,122 +1,97 @@
-// ===== ABCE Main JavaScript =====
+// ===== ABCE 2027 Main JavaScript =====
 
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize i18n
   window.i18n.initLanguage();
 
-  // Language switcher
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.i18n.switchLanguage(btn.dataset.lang);
-    });
-  });
+  // Initialize all modules
+  initCountdown();
+  initScrollAnimations();
+  initHeaderScroll();
+  initMobileMenu();
+  initSmoothScroll();
+  initForms();
+  initModals();
+  initLanguageSwitcher();
+  initCounterAnimation();
+});
 
-  // Mobile menu
-  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const header = document.querySelector('.header');
+// ===== Countdown Timer =====
+function initCountdown() {
+  const eventDate = new Date('2027-01-15T09:00:00+08:00').getTime();
 
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
-      let mobileNav = document.querySelector('.mobile-nav');
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = eventDate - now;
 
-      if (!mobileNav) {
-        // Create mobile nav
-        mobileNav = document.createElement('div');
-        mobileNav.className = 'mobile-nav';
-        mobileNav.innerHTML = `
-          <a href="#matchmaking" class="nav-link" data-i18n="nav.matchmaking">${window.i18n.t('nav.matchmaking')}</a>
-          <a href="#booth" class="nav-link" data-i18n="nav.booth">${window.i18n.t('nav.booth')}</a>
-          <a href="#gallery" class="nav-link" data-i18n="nav.gallery">${window.i18n.t('nav.gallery')}</a>
-          <div class="language-switcher">
-            <button class="lang-btn ${window.i18n.getCurrentLang() === 'zh' ? 'active' : ''}" data-lang="zh">繁中</button>
-            <button class="lang-btn ${window.i18n.getCurrentLang() === 'en' ? 'active' : ''}" data-lang="en">EN</button>
-            <button class="lang-btn ${window.i18n.getCurrentLang() === 'ja' ? 'active' : ''}" data-lang="ja">日本語</button>
-            <button class="lang-btn ${window.i18n.getCurrentLang() === 'ko' ? 'active' : ''}" data-lang="ko">한국어</button>
-          </div>
-        `;
-        header.after(mobileNav);
-
-        // Add event listeners to mobile nav
-        mobileNav.querySelectorAll('.nav-link').forEach(link => {
-          link.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-          });
-        });
-
-        mobileNav.querySelectorAll('.lang-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            window.i18n.switchLanguage(btn.dataset.lang);
-            // Update all lang buttons
-            document.querySelectorAll('.lang-btn').forEach(b => {
-              b.classList.toggle('active', b.dataset.lang === btn.dataset.lang);
-            });
-          });
-        });
-      }
-
-      mobileNav.classList.toggle('active');
-    });
-  }
-
-  // Close mobile menu on link click
-  document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      document.querySelector('.mobile-nav')?.classList.remove('active');
-    });
-  });
-
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        const headerHeight = document.querySelector('.header').offsetHeight;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-
-  // Header scroll effect
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 100) {
-      header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-    } else {
-      header.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+    if (distance < 0) {
+      document.getElementById('countdown').innerHTML = '<p style="color: var(--color-gold);">Event Started!</p>';
+      return;
     }
 
-    lastScroll = currentScroll;
-  });
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((distance % (1000 * 60)) / 1000);
 
-  // Matchmaking Form
-  const matchmakingForm = document.getElementById('matchmakingForm');
-  if (matchmakingForm) {
-    matchmakingForm.addEventListener('submit', handleMatchmakingSubmit);
+    const daysEl = document.getElementById('countdown-days');
+    const hoursEl = document.getElementById('countdown-hours');
+    const minsEl = document.getElementById('countdown-mins');
+    const secsEl = document.getElementById('countdown-secs');
+
+    if (daysEl) daysEl.textContent = String(days).padStart(3, '0');
+    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+    if (minsEl) minsEl.textContent = String(mins).padStart(2, '0');
+    if (secsEl) secsEl.textContent = String(secs).padStart(2, '0');
   }
 
-  // Booth Form
-  const boothForm = document.getElementById('boothForm');
-  if (boothForm) {
-    boothForm.addEventListener('submit', handleBoothSubmit);
-  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
 
-  // Modal close buttons
-  document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
-    el.addEventListener('click', () => {
-      document.querySelectorAll('.modal').forEach(modal => {
-        modal.classList.remove('active');
-      });
+// ===== Counter Animation =====
+function initCounterAnimation() {
+  const counters = document.querySelectorAll('.stat-number[data-count]');
+
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: '0px'
+  };
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+        animateCounter(entry.target);
+        entry.target.classList.add('counted');
+      }
     });
-  });
+  }, observerOptions);
 
-  // Scroll animations
+  counters.forEach(counter => counterObserver.observe(counter));
+}
+
+function animateCounter(element) {
+  const target = parseInt(element.getAttribute('data-count'));
+  const duration = 2000;
+  const step = target / (duration / 16);
+  let current = 0;
+
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    element.textContent = formatNumber(Math.floor(current)) + '+';
+  }, 16);
+}
+
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// ===== Scroll Animations =====
+function initScrollAnimations() {
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -130,20 +105,122 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, observerOptions);
 
-  document.querySelectorAll('.stat-card, .feature-card, .gallery-item').forEach(el => {
-    el.classList.add('fade-in');
-    observer.observe(el);
-  });
-});
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
 
-// Handle Matchmaking Form Submit
+// ===== Header Scroll Effect =====
+function initHeaderScroll() {
+  const header = document.querySelector('.header');
+
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+}
+
+// ===== Mobile Menu =====
+function initMobileMenu() {
+  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  const header = document.querySelector('.header');
+
+  if (!mobileMenuBtn) return;
+
+  mobileMenuBtn.addEventListener('click', () => {
+    let mobileNav = document.querySelector('.mobile-nav');
+
+    if (!mobileNav) {
+      mobileNav = document.createElement('div');
+      mobileNav.className = 'mobile-nav';
+      mobileNav.innerHTML = `
+        <a href="#matchmaking" class="nav-link" data-i18n="nav.matchmaking">${window.i18n.t('nav.matchmaking')}</a>
+        <a href="#booth" class="nav-link" data-i18n="nav.booth">${window.i18n.t('nav.booth')}</a>
+        <a href="#gallery" class="nav-link" data-i18n="nav.gallery">${window.i18n.t('nav.gallery')}</a>
+        <div class="language-switcher">
+          <button class="lang-btn ${window.i18n.getCurrentLang() === 'zh' ? 'active' : ''}" data-lang="zh">繁中</button>
+          <button class="lang-btn ${window.i18n.getCurrentLang() === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+          <button class="lang-btn ${window.i18n.getCurrentLang() === 'ja' ? 'active' : ''}" data-lang="ja">日本語</button>
+          <button class="lang-btn ${window.i18n.getCurrentLang() === 'ko' ? 'active' : ''}" data-lang="ko">한국어</button>
+        </div>
+      `;
+      header.after(mobileNav);
+
+      // Add event listeners to mobile nav
+      mobileNav.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.remove('active');
+        });
+      });
+
+      mobileNav.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          window.i18n.switchLanguage(btn.dataset.lang);
+          document.querySelectorAll('.lang-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.lang === btn.dataset.lang);
+          });
+        });
+      });
+    }
+
+    mobileNav.classList.toggle('active');
+  });
+}
+
+// ===== Smooth Scroll =====
+function initSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+
+      const target = document.querySelector(targetId);
+      if (target) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+
+        // Close mobile menu if open
+        const mobileNav = document.querySelector('.mobile-nav');
+        if (mobileNav) mobileNav.classList.remove('active');
+      }
+    });
+  });
+}
+
+// ===== Language Switcher =====
+function initLanguageSwitcher() {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.i18n.switchLanguage(btn.dataset.lang);
+    });
+  });
+}
+
+// ===== Forms =====
+function initForms() {
+  const matchmakingForm = document.getElementById('matchmakingForm');
+  if (matchmakingForm) {
+    matchmakingForm.addEventListener('submit', handleMatchmakingSubmit);
+  }
+
+  const boothForm = document.getElementById('boothForm');
+  if (boothForm) {
+    boothForm.addEventListener('submit', handleBoothSubmit);
+  }
+}
+
 function handleMatchmakingSubmit(e) {
   e.preventDefault();
 
   const form = e.target;
   const formData = new FormData(form);
 
-  // Validate checkboxes
   const targetIndustries = formData.getAll('targetIndustries');
   if (targetIndustries.length === 0) {
     alert(window.i18n.getCurrentLang() === 'zh'
@@ -152,47 +229,37 @@ function handleMatchmakingSubmit(e) {
     return;
   }
 
-  // Collect form data
   const data = {
     name: formData.get('name'),
     company: formData.get('company'),
-    email: formData.get('email'),
-    phone: formData.get('phone'),
-    country: formData.get('country'),
-    industry: formData.get('industry'),
+    contact: formData.get('contact'),
     targetIndustries: targetIndustries,
-    description: formData.get('description'),
-    attendedBefore: formData.get('attendedBefore') === 'yes',
     language: window.i18n.getCurrentLang(),
     submittedAt: new Date().toISOString()
   };
 
   console.log('Matchmaking submission:', data);
-
-  // Show result modal
   showMatchmakingResult(targetIndustries);
-
-  // Reset form
   form.reset();
 }
 
-// Show Matchmaking Result
 function showMatchmakingResult(targetIndustries) {
   const modal = document.getElementById('matchmakingResult');
   const statsContainer = document.getElementById('resultStats');
 
-  // Generate stats HTML
   let statsHTML = '';
   targetIndustries.forEach(code => {
     const stat = window.i18n.getIndustryStat(code);
     if (stat) {
+      const resourceText = window.i18n.t('result.resourceAvailable') || '位企業主資源';
       statsHTML += `
         <div class="result-stat-item">
           <span class="result-stat-label">
-            <span>${getIndustryIcon(code)}</span>
             <span>${stat.name}</span>
           </span>
-          <span class="result-stat-value">${stat.count} ${window.i18n.t('result.companies') || '家企業'}</span>
+          <span class="result-stat-value">
+            <span class="result-stat-number">${stat.count}</span> ${resourceText}
+          </span>
         </div>
       `;
     }
@@ -202,42 +269,12 @@ function showMatchmakingResult(targetIndustries) {
   modal.classList.add('active');
 }
 
-// Get industry icon
-function getIndustryIcon(code) {
-  const icons = {
-    FOOD: '🍽️',
-    TECH: '💻',
-    MANUFACTURING: '🏭',
-    FINANCE: '🏦',
-    REAL_ESTATE: '🏢',
-    RETAIL: '🛒',
-    MEDICAL: '🏥',
-    EDUCATION: '📚',
-    MARKETING: '📢',
-    LEGAL: '⚖️',
-    LOGISTICS: '🚚',
-    TOURISM: '✈️',
-    CONSTRUCTION: '🏗️',
-    BEAUTY: '💇',
-    PROFESSIONAL: '💼',
-    OTHER: '📋'
-  };
-  return icons[code] || '📋';
-}
-
-// Close modal
-function closeModal() {
-  document.getElementById('matchmakingResult').classList.remove('active');
-}
-
-// Handle Booth Form Submit
 function handleBoothSubmit(e) {
   e.preventDefault();
 
   const form = e.target;
   const formData = new FormData(form);
 
-  // Collect form data
   const data = {
     name: formData.get('name'),
     company: formData.get('company'),
@@ -256,15 +293,36 @@ function handleBoothSubmit(e) {
   };
 
   console.log('Booth submission:', data);
-
-  // Show success modal
   document.getElementById('boothSuccess').classList.add('active');
-
-  // Reset form
   form.reset();
 }
 
-// Close booth modal
+// ===== Modals =====
+function initModals() {
+  document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target === el) {
+        document.querySelectorAll('.modal').forEach(modal => {
+          modal.classList.remove('active');
+        });
+      }
+    });
+  });
+
+  // Close on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+      });
+    }
+  });
+}
+
+function closeModal() {
+  document.getElementById('matchmakingResult').classList.remove('active');
+}
+
 function closeBoothModal() {
   document.getElementById('boothSuccess').classList.remove('active');
 }

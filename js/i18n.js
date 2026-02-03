@@ -8,9 +8,10 @@ const translations = {
     'nav.gallery': '活動花絮',
 
     // Hero
-    'hero.subtitle': '第五屆亞洲商媒會',
+    'hero.eyebrow': "Asia's Premier",
+    'hero.subtitle': '第五屆 亞洲商媒會',
     'hero.date': '2027年1月',
-    'hero.location': '台北',
+    'hero.location': 'Taipei, Taiwan',
     'hero.participants': '商務人士',
     'hero.countries': '亞洲國家',
 
@@ -59,6 +60,7 @@ const translations = {
     // Form
     'form.name': '姓名',
     'form.company': '公司名稱',
+    'form.contact': 'LINE ID 或電話',
     'form.email': '電子郵件',
     'form.phone': '電話',
     'form.country': '國家/地區',
@@ -81,7 +83,7 @@ const translations = {
     'form.specialRequest': '特殊需求（選填）',
 
     // Industries
-    'industry.food': '餐飲服務',
+    'industry.food': '餐飲食品',
     'industry.tech': '科技資訊',
     'industry.manufacturing': '製造業',
     'industry.finance': '金融保險',
@@ -92,12 +94,17 @@ const translations = {
     'industry.marketing': '行銷廣告',
     'industry.logistics': '物流運輸',
     'industry.tourism': '旅遊觀光',
+    'industry.legal': '法律會計',
+    'industry.construction': '建築工程',
+    'industry.beauty': '美容美髮',
+    'industry.professional': '專業服務',
     'industry.other': '其他',
 
     // Result
     'result.title': '感謝您的填寫！',
-    'result.subtitle': '根據您的需求，在 2,000+ 資源中：',
-    'result.notice': '我們將評估媒合機會，並於活動前通知您。',
+    'result.subtitle': '根據您的需求，我們會參與的 2,000+ 位企業主裡面：',
+    'result.resourceAvailable': '位企業主資源',
+    'result.notice': '我們將評估媒合機會，並於活動前通知您參與媒合。',
     'result.applyBooth': '申請展示攤位',
     'result.backHome': '返回首頁',
 
@@ -123,9 +130,10 @@ const translations = {
     'nav.gallery': 'Gallery',
 
     // Hero
+    'hero.eyebrow': "Asia's Premier",
     'hero.subtitle': '5th Asia Business Co-creation Expo',
     'hero.date': 'January 2027',
-    'hero.location': 'Taipei',
+    'hero.location': 'Taipei, Taiwan',
     'hero.participants': 'Business Professionals',
     'hero.countries': 'Asian Countries',
 
@@ -174,6 +182,7 @@ const translations = {
     // Form
     'form.name': 'Name',
     'form.company': 'Company',
+    'form.contact': 'LINE ID or Phone',
     'form.email': 'Email',
     'form.phone': 'Phone',
     'form.country': 'Country/Region',
@@ -207,11 +216,16 @@ const translations = {
     'industry.marketing': 'Marketing & Advertising',
     'industry.logistics': 'Logistics',
     'industry.tourism': 'Tourism',
+    'industry.legal': 'Legal & Accounting',
+    'industry.construction': 'Construction & Engineering',
+    'industry.beauty': 'Beauty & Wellness',
+    'industry.professional': 'Professional Services',
     'industry.other': 'Other',
 
     // Result
     'result.title': 'Thank You!',
-    'result.subtitle': 'Based on your requirements, among 2,000+ resources:',
+    'result.subtitle': 'Based on your requirements, among 2,000+ business owners participating:',
+    'result.resourceAvailable': 'business owner resources',
     'result.notice': 'We\'ll evaluate matching opportunities and notify you before the event.',
     'result.applyBooth': 'Apply for Booth',
     'result.backHome': 'Back to Home',
@@ -238,9 +252,10 @@ const translations = {
     'nav.gallery': 'ギャラリー',
 
     // Hero
-    'hero.subtitle': '第5回アジアビジネス共創エキスポ',
+    'hero.eyebrow': "Asia's Premier",
+    'hero.subtitle': '第5回 アジアビジネス共創エキスポ',
     'hero.date': '2027年1月',
-    'hero.location': '台北',
+    'hero.location': 'Taipei, Taiwan',
     'hero.participants': 'ビジネスパーソン',
     'hero.countries': 'アジア諸国',
 
@@ -289,6 +304,7 @@ const translations = {
     // Form
     'form.name': '氏名',
     'form.company': '会社名',
+    'form.contact': 'LINE IDまたは電話番号',
     'form.email': 'メールアドレス',
     'form.phone': '電話番号',
     'form.country': '国/地域',
@@ -322,11 +338,16 @@ const translations = {
     'industry.marketing': 'マーケティング・広告',
     'industry.logistics': '物流',
     'industry.tourism': '観光',
+    'industry.legal': '法務・会計',
+    'industry.construction': '建設・エンジニアリング',
+    'industry.beauty': '美容・ウェルネス',
+    'industry.professional': 'プロフェッショナルサービス',
     'industry.other': 'その他',
 
     // Result
     'result.title': 'ありがとうございます！',
-    'result.subtitle': 'ご要望に基づき、2,000以上のリソースの中から：',
+    'result.subtitle': 'ご要望に基づき、参加予定の2,000名以上のビジネスオーナーの中から：',
+    'result.resourceAvailable': '名のビジネスオーナーリソース',
     'result.notice': 'マッチング機会を評価し、イベント前にご連絡いたします。',
     'result.applyBooth': 'ブースを申請',
     'result.backHome': 'ホームに戻る',
@@ -353,9 +374,10 @@ const translations = {
     'nav.gallery': '갤러리',
 
     // Hero
+    'hero.eyebrow': "Asia's Premier",
     'hero.subtitle': '제5회 아시아 비즈니스 공동창조 엑스포',
     'hero.date': '2027년 1월',
-    'hero.location': '타이베이',
+    'hero.location': 'Taipei, Taiwan',
     'hero.participants': '비즈니스 전문가',
     'hero.countries': '아시아 국가',
 
@@ -404,6 +426,7 @@ const translations = {
     // Form
     'form.name': '이름',
     'form.company': '회사명',
+    'form.contact': 'LINE ID 또는 전화번호',
     'form.email': '이메일',
     'form.phone': '전화번호',
     'form.country': '국가/지역',
@@ -437,11 +460,16 @@ const translations = {
     'industry.marketing': '마케팅/광고',
     'industry.logistics': '물류',
     'industry.tourism': '관광',
+    'industry.legal': '법률/회계',
+    'industry.construction': '건설/엔지니어링',
+    'industry.beauty': '뷰티/웰니스',
+    'industry.professional': '전문 서비스',
     'industry.other': '기타',
 
     // Result
     'result.title': '감사합니다!',
-    'result.subtitle': '귀하의 요구 사항에 따라 2,000개 이상의 리소스 중:',
+    'result.subtitle': '귀하의 요구 사항에 따라 참가 예정인 2,000명 이상의 비즈니스 오너 중:',
+    'result.resourceAvailable': '명의 비즈니스 오너 리소스',
     'result.notice': '매칭 기회를 평가하고 이벤트 전에 알려드립니다.',
     'result.applyBooth': '부스 신청',
     'result.backHome': '홈으로 돌아가기',
@@ -462,24 +490,24 @@ const translations = {
   }
 };
 
-// Industry stats for matching result
+// Industry stats for matching result (based on real BNI member data)
 const industryStats = {
-  FOOD: { zh: '餐飲相關', en: 'Food & Beverage', ja: '飲食関連', ko: '식음료 관련', count: 185 },
-  TECH: { zh: '科技資訊', en: 'Technology', ja: 'テクノロジー', ko: '기술', count: 230 },
-  MANUFACTURING: { zh: '製造業', en: 'Manufacturing', ja: '製造業', ko: '제조업', count: 156 },
-  FINANCE: { zh: '金融保險', en: 'Finance', ja: '金融', ko: '금융', count: 89 },
-  REAL_ESTATE: { zh: '房地產', en: 'Real Estate', ja: '不動産', ko: '부동산', count: 67 },
-  RETAIL: { zh: '零售批發', en: 'Retail', ja: '小売', ko: '소매', count: 124 },
-  MEDICAL: { zh: '醫療健康', en: 'Healthcare', ja: '医療', ko: '의료', count: 78 },
-  EDUCATION: { zh: '教育培訓', en: 'Education', ja: '教育', ko: '교육', count: 95 },
-  MARKETING: { zh: '行銷廣告', en: 'Marketing', ja: 'マーケティング', ko: '마케팅', count: 112 },
-  LEGAL: { zh: '法律會計', en: 'Legal & Accounting', ja: '法務・会計', ko: '법률/회계', count: 45 },
-  LOGISTICS: { zh: '物流運輸', en: 'Logistics', ja: '物流', ko: '물류', count: 67 },
-  TOURISM: { zh: '旅遊觀光', en: 'Tourism', ja: '観光', ko: '관광', count: 89 },
-  CONSTRUCTION: { zh: '建築工程', en: 'Construction', ja: '建設', ko: '건설', count: 78 },
-  BEAUTY: { zh: '美容美髮', en: 'Beauty', ja: '美容', ko: '뷰티', count: 56 },
-  PROFESSIONAL: { zh: '專業服務', en: 'Professional Services', ja: 'プロフェッショナルサービス', ko: '전문 서비스', count: 134 },
-  OTHER: { zh: '其他', en: 'Other', ja: 'その他', ko: '기타', count: 200 }
+  FOOD: { zh: '餐飲食品', en: 'Food & Beverage', ja: '飲食関連', ko: '식음료 관련', count: 55 },
+  TECH: { zh: '科技資訊', en: 'Technology', ja: 'テクノロジー', ko: '기술', count: 71 },
+  MANUFACTURING: { zh: '製造業', en: 'Manufacturing', ja: '製造業', ko: '제조업', count: 47 },
+  FINANCE: { zh: '金融保險', en: 'Finance & Insurance', ja: '金融・保険', ko: '금융/보험', count: 55 },
+  REAL_ESTATE: { zh: '房地產', en: 'Real Estate', ja: '不動産', ko: '부동산', count: 42 },
+  RETAIL: { zh: '零售批發', en: 'Retail & Wholesale', ja: '小売・卸売', ko: '소매/도매', count: 59 },
+  MEDICAL: { zh: '醫療健康', en: 'Healthcare', ja: '医療・ヘルスケア', ko: '의료/헬스케어', count: 57 },
+  EDUCATION: { zh: '教育培訓', en: 'Education & Training', ja: '教育・研修', ko: '교육/연수', count: 53 },
+  MARKETING: { zh: '行銷廣告', en: 'Marketing & Advertising', ja: 'マーケティング・広告', ko: '마케팅/광고', count: 68 },
+  LEGAL: { zh: '法律會計', en: 'Legal & Accounting', ja: '法務・会計', ko: '법률/회계', count: 53 },
+  LOGISTICS: { zh: '物流運輸', en: 'Logistics & Transportation', ja: '物流・運輸', ko: '물류/운송', count: 25 },
+  TOURISM: { zh: '旅遊觀光', en: 'Tourism & Hospitality', ja: '観光・ホスピタリティ', ko: '관광/숙박', count: 44 },
+  CONSTRUCTION: { zh: '建築工程', en: 'Construction & Engineering', ja: '建設・エンジニアリング', ko: '건설/엔지니어링', count: 47 },
+  BEAUTY: { zh: '美容美髮', en: 'Beauty & Wellness', ja: '美容・ウェルネス', ko: '뷰티/웰니스', count: 36 },
+  PROFESSIONAL: { zh: '專業服務', en: 'Professional Services', ja: 'プロフェッショナルサービス', ko: '전문 서비스', count: 73 },
+  OTHER: { zh: '其他', en: 'Other', ja: 'その他', ko: '기타', count: 50 }
 };
 
 // Current language
