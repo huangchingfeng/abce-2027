@@ -253,6 +253,7 @@ function initMobileMenu() {
           document.querySelectorAll('.lang-btn').forEach(b => {
             b.classList.toggle('active', b.dataset.lang === btn.dataset.lang);
           });
+          updateMobileLangDisplay();
         });
       });
     }
@@ -288,42 +289,98 @@ function initSmoothScroll() {
 
 // ===== Language Switcher =====
 function initLanguageSwitcher() {
-  const switchers = document.querySelectorAll('.header .language-switcher');
-
-  switchers.forEach(switcher => {
-    const buttons = switcher.querySelectorAll('.lang-btn');
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const isMobile = window.innerWidth <= 768;
-
-        if (isMobile) {
-          // 手機版：點擊 active 按鈕展開/收起選單
-          if (btn.classList.contains('active') && !switcher.classList.contains('open')) {
-            e.preventDefault();
-            switcher.classList.add('open');
-            return;
-          }
-
-          // 選擇其他語言後收起選單
-          if (switcher.classList.contains('open')) {
-            switcher.classList.remove('open');
-          }
-        }
-
+  // Desktop language switcher
+  const desktopSwitcher = document.querySelector('.header .language-switcher.desktop-only');
+  if (desktopSwitcher) {
+    desktopSwitcher.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
         window.i18n.switchLanguage(btn.dataset.lang);
+        updateMobileLangDisplay();
       });
     });
-  });
+  }
 
-  // 點擊外部關閉下拉選單
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.language-switcher')) {
-      document.querySelectorAll('.language-switcher.open').forEach(s => {
-        s.classList.remove('open');
-      });
+  // Mobile language button & popup
+  const mobileLangBtn = document.getElementById('mobileLangBtn');
+  const mobileLangPopup = document.getElementById('mobileLangPopup');
+
+  if (mobileLangBtn && mobileLangPopup) {
+    // Create overlay if not exists
+    let overlay = document.querySelector('.mobile-lang-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'mobile-lang-overlay';
+      document.body.appendChild(overlay);
     }
-  });
+
+    // Open popup
+    mobileLangBtn.addEventListener('click', () => {
+      mobileLangPopup.classList.add('active');
+      overlay.classList.add('active');
+    });
+
+    // Close popup
+    const closePopup = () => {
+      mobileLangPopup.classList.remove('active');
+      overlay.classList.remove('active');
+    };
+
+    // Close button
+    const closeBtn = mobileLangPopup.querySelector('.mobile-lang-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closePopup);
+    }
+
+    // Click overlay to close
+    overlay.addEventListener('click', closePopup);
+
+    // Language options
+    mobileLangPopup.querySelectorAll('.mobile-lang-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const lang = option.dataset.lang;
+        window.i18n.switchLanguage(lang);
+
+        // Update active state
+        mobileLangPopup.querySelectorAll('.mobile-lang-option').forEach(opt => {
+          opt.classList.toggle('active', opt.dataset.lang === lang);
+        });
+
+        updateMobileLangDisplay();
+        closePopup();
+      });
+    });
+
+    // Initialize display
+    updateMobileLangDisplay();
+  }
+}
+
+// Update mobile language button display
+function updateMobileLangDisplay() {
+  const mobileLangBtn = document.getElementById('mobileLangBtn');
+  const mobileLangPopup = document.getElementById('mobileLangPopup');
+  if (!mobileLangBtn) return;
+
+  const currentLang = window.i18n.getCurrentLang();
+  const langDisplay = {
+    zh: '繁中',
+    en: 'EN',
+    ja: '日本',
+    ko: '한국'
+  };
+
+  // Update button display
+  const currentLangSpan = mobileLangBtn.querySelector('.current-lang');
+  if (currentLangSpan) {
+    currentLangSpan.textContent = langDisplay[currentLang] || currentLang.toUpperCase();
+  }
+
+  // Update popup active state
+  if (mobileLangPopup) {
+    mobileLangPopup.querySelectorAll('.mobile-lang-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.lang === currentLang);
+    });
+  }
 }
 
 // ===== Forms =====

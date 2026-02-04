@@ -173,6 +173,9 @@ const translations = {
     // Admin
     'admin.login': '管理員登入',
 
+    // Language
+    'language.select': '選擇語言',
+
     // Gallery Alt
     'gallery.alt1': '活動花絮 1',
     'gallery.alt2': '活動花絮 2',
@@ -364,6 +367,9 @@ const translations = {
 
     // Admin
     'admin.login': 'Admin Login',
+
+    // Language
+    'language.select': 'Select Language',
 
     // Gallery Alt
     'gallery.alt1': 'Event Gallery 1',
@@ -557,6 +563,9 @@ const translations = {
     // Admin
     'admin.login': '管理者ログイン',
 
+    // Language
+    'language.select': '言語を選択',
+
     // Gallery Alt
     'gallery.alt1': 'イベントギャラリー 1',
     'gallery.alt2': 'イベントギャラリー 2',
@@ -748,6 +757,9 @@ const translations = {
 
     // Admin
     'admin.login': '관리자 로그인',
+
+    // Language
+    'language.select': '언어 선택',
 
     // Gallery Alt
     'gallery.alt1': '이벤트 갤러리 1',

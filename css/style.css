@@ -301,6 +301,154 @@ button {
   transition: var(--transition-base);
 }
 
+/* Mobile Language Button (Globe Icon) */
+.mobile-lang-btn {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.mobile-lang-btn:hover {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-hover);
+}
+
+.mobile-lang-btn svg {
+  color: var(--color-gold);
+}
+
+.mobile-lang-btn .current-lang {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Mobile Language Popup */
+.mobile-lang-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  min-width: 280px;
+  overflow: hidden;
+  animation: popupFadeIn 0.2s ease;
+}
+
+.mobile-lang-popup.active {
+  display: block;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.mobile-lang-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-tertiary);
+}
+
+.mobile-lang-popup-header span {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mobile-lang-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.mobile-lang-close:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+}
+
+.mobile-lang-options {
+  padding: var(--space-2);
+}
+
+.mobile-lang-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.mobile-lang-option:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+}
+
+.mobile-lang-option.active {
+  background: var(--color-gold-muted);
+  color: var(--color-gold);
+}
+
+.mobile-lang-option .lang-flag {
+  font-size: 1.5rem;
+}
+
+.mobile-lang-option .lang-name {
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+/* Mobile Language Overlay */
+.mobile-lang-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1999;
+}
+
+.mobile-lang-overlay.active {
+  display: block;
+}
+
 /* ===== Hero Section ===== */
 .hero {
   position: relative;
@@ -1602,82 +1750,14 @@ button {
     display: none;
   }
 
-  /* 手機版語言選單 - 下拉式設計 */
-  .language-switcher {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-  }
-
-  .language-switcher .lang-btn {
+  /* 隱藏電腦版語言選單 */
+  .language-switcher.desktop-only {
     display: none;
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-sm);
-    background: var(--color-bg-card);
-    border-radius: 0;
-    justify-content: center;
-    min-width: 100px;
   }
 
-  .language-switcher .lang-btn.active {
+  /* 顯示手機版語言按鈕 */
+  .mobile-lang-btn {
     display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    background: var(--color-bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
-  }
-
-  /* 下拉箭頭 */
-  .language-switcher .lang-btn.active::after {
-    content: '';
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid var(--color-text-secondary);
-    transition: var(--transition-fast);
-  }
-
-  /* 展開狀態 */
-  .language-switcher.open .lang-btn {
-    display: flex;
-    position: relative;
-    z-index: 100;
-  }
-
-  .language-switcher.open .lang-btn:not(.active) {
-    border-top: 1px solid var(--color-border);
-  }
-
-  .language-switcher.open .lang-btn:first-child {
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-  }
-
-  .language-switcher.open .lang-btn:last-child {
-    border-radius: 0 0 var(--radius-md) var(--radius-md);
-  }
-
-  .language-switcher.open .lang-btn.active {
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-    border-bottom: none;
-  }
-
-  .language-switcher.open .lang-btn.active::after {
-    transform: rotate(180deg);
-  }
-
-  .language-switcher.open {
-    position: absolute;
-    top: 50%;
-    right: 60px;
-    transform: translateY(-50%);
-    box-shadow: var(--shadow-lg);
-    border-radius: var(--radius-md);
-    z-index: 1001;
   }
 
   .mobile-menu-btn {
