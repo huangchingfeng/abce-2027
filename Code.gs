@@ -10,18 +10,10 @@
  * 6. 設定「存取權」為「所有人」
  * 7. 點擊「部署」，複製網址
  * 8. 將網址貼到 admin.html 的設定欄位
- *
- * Gemini AI 設定：
- * 1. 前往 https://aistudio.google.com/apikey 取得 API Key
- * 2. 在下方 GEMINI_API_KEY 填入你的 API Key
  */
 
-// ===== Gemini AI 設定 =====
-// 安全做法：從 Script Properties 讀取 API Key（不會外洩到 GitHub）
-// 設定方式：Apps Script → 專案設定 → 指令碼屬性 → 新增 GEMINI_API_KEY
-const GEMINI_API_KEY = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY') || '';
-const GEMINI_MODEL = 'gemini-1.5-flash';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
+// ===== 媒合系統設定 =====
+// 使用靜態規則回應（不需要 AI API）
 
 // 取得試算表（自動取得綁定的試算表）
 function getSpreadsheet() {
@@ -241,44 +233,7 @@ function jsonResponse(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ===== Gemini AI 智慧媒合 =====
-
-// 呼叫 Gemini API
-function callGemini(prompt) {
-  if (!GEMINI_API_KEY) {
-    throw new Error('Gemini API Key 未設定');
-  }
-
-  const url = `${GEMINI_API_URL}${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-
-  const payload = {
-    contents: [{
-      parts: [{
-        text: prompt
-      }]
-    }],
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 2048
-    }
-  };
-
-  const options = {
-    method: 'post',
-    contentType: 'application/json',
-    payload: JSON.stringify(payload),
-    muteHttpExceptions: true
-  };
-
-  const response = UrlFetchApp.fetch(url, options);
-  const result = JSON.parse(response.getContentText());
-
-  if (result.error) {
-    throw new Error(result.error.message);
-  }
-
-  return result.candidates[0].content.parts[0].text;
-}
+// ===== 媒合分析 =====
 
 // 取得 ABCE 資源庫（詳細數據）
 function getABCEResourceDatabase() {
@@ -379,23 +334,9 @@ function getABCEResourceDatabase() {
   };
 }
 
-// 智慧媒合分析
+// 媒合分析（靜態規則）
 function analyzeMatchmakingWithAI(userData) {
   const resourceDB = getABCEResourceDatabase();
-
-  // 如果有 API Key，嘗試使用 Gemini AI 生成回應
-  if (GEMINI_API_KEY) {
-    try {
-      const aiResponse = generateAIResponse(userData, resourceDB);
-      if (aiResponse) {
-        return aiResponse;
-      }
-    } catch (error) {
-      console.log('AI 生成失敗，使用靜態回應：', error.message);
-    }
-  }
-
-  // 回退到靜態回應
   const customResponse = generateCustomResponse(userData, resourceDB);
 
   return {
@@ -407,127 +348,6 @@ function analyzeMatchmakingWithAI(userData) {
     totalResources: resourceDB.totalMembers,
     closing: customResponse.closing
   };
-}
-
-// 使用 Gemini AI 生成回應
-function generateAIResponse(userData, resourceDB) {
-  const resourceNeeded = userData.resourceNeeded || [];
-  const resourceDetails = userData.resourceDetails || {};
-  const targetIndustries = userData.targetIndustries || [];
-  const industryDetails = userData.industryDetails || {};
-  const freeDescription = userData.freeDescription || '';
-
-  // 產業代碼對應中文
-  const industryMap = {
-    'FOOD': '餐飲服務', 'TECH': '科技資訊', 'FINANCE': '金融保險',
-    'MANUFACTURING': '製造業', 'MEDICAL': '醫療健康', 'RETAIL': '零售批發',
-    'PROFESSIONAL': '專業服務', 'OTHER': '其他'
-  };
-
-  // 資源代碼對應中文
-  const resourceMap = {
-    'SUPPLIER': '供應商', 'BUYER': '買家/客戶', 'PARTNER': '合作夥伴',
-    'INVESTOR': '投資人', 'CHANNEL': '通路/代理', 'TALENT': '人才', 'OTHER': '其他'
-  };
-
-  // 構建用戶需求描述
-  let userNeedsText = '';
-  if (resourceNeeded.length > 0) {
-    const needsList = resourceNeeded.map(r => {
-      const name = resourceMap[r] || r;
-      const detail = resourceDetails[r] || '';
-      return detail ? `${name}（${detail}）` : name;
-    });
-    userNeedsText += `需要的資源：${needsList.join('、')}\n`;
-  }
-  if (targetIndustries.length > 0) {
-    const industryList = targetIndustries.map(i => {
-      const name = industryMap[i] || i;
-      const detail = industryDetails[i] || '';
-      return detail ? `${name}（${detail}）` : name;
-    });
-    userNeedsText += `想媒合的產業：${industryList.join('、')}\n`;
-  }
-  if (freeDescription) {
-    userNeedsText += `補充說明：${freeDescription}\n`;
-  }
-
-  // 構建資源庫摘要（只列出相關的）
-  let resourceSummary = 'ABCE 亞洲商媒會資源統計：\n';
-  resourceSummary += `- 總企業主數：2,000+ 位\n`;
-  resourceSummary += `- 涵蓋國家：4 個（台灣、日本、韓國、香港）\n\n`;
-
-  // 加入相關資源的詳細數據
-  if (resourceNeeded.length > 0) {
-    resourceNeeded.forEach(r => {
-      if (resourceDB.resources[r]) {
-        const res = resourceDB.resources[r];
-        resourceSummary += `【${resourceMap[r]}】總數 ${res.count}+ 位\n`;
-        if (res.subCategories) {
-          Object.entries(res.subCategories).forEach(([name, count]) => {
-            resourceSummary += `  - ${name}：${count} 位\n`;
-          });
-        }
-      }
-    });
-  }
-
-  if (targetIndustries.length > 0) {
-    resourceSummary += '\n相關產業企業主：\n';
-    targetIndustries.forEach(i => {
-      const name = industryMap[i];
-      if (name && resourceDB.industries[name]) {
-        const ind = resourceDB.industries[name];
-        resourceSummary += `【${name}】${ind.count}+ 位\n`;
-        resourceSummary += `  ${ind.examples.join('、')}\n`;
-      }
-    });
-  }
-
-  // 構建 prompt
-  const prompt = `你是 ABCE 亞洲商媒會的媒合專員。根據以下用戶需求和資源庫數據，生成一段專業的回應。
-
-用戶需求：
-${userNeedsText || '未填寫具體需求'}
-
-${resourceSummary}
-
-請生成回應，格式要求：
-1. message（開場訊息）：一句話說明我們有什麼資源可以幫助他，要包含具體數字。專業但不矯情。
-2. summary（摘要）：簡短說明 ABCE 的資源規模和相關數據。
-3. relatedResources（相關資源列表）：JSON 陣列格式，每項包含 name（資源名稱）、count（數量）、examples（陣列，2-3 個具體例子）
-4. closing（結語）：一句話歡迎他參加 ABCE 2027
-
-請以 JSON 格式回覆，不要加任何說明文字：
-{
-  "message": "...",
-  "summary": "...",
-  "relatedResources": [{"name": "...", "count": 數字, "examples": ["...", "..."]}],
-  "closing": "..."
-}`;
-
-  // 呼叫 Gemini API
-  const aiText = callGemini(prompt);
-
-  // 解析 JSON
-  try {
-    // 移除可能的 markdown 標記
-    let jsonText = aiText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    const result = JSON.parse(jsonText);
-
-    return {
-      success: true,
-      message: result.message || '',
-      summary: result.summary || '',
-      relatedResources: result.relatedResources || [],
-      highlight: '',
-      totalResources: resourceDB.totalMembers,
-      closing: result.closing || '歡迎參加 ABCE 2027，現場將有更多媒合機會。'
-    };
-  } catch (parseError) {
-    console.log('AI 回應解析失敗：', parseError.message);
-    return null;
-  }
 }
 
 // 生成客製化回應（根據用戶填寫的資源需求）
