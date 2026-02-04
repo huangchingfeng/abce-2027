@@ -341,24 +341,33 @@ function initLanguageSwitcher() {
     // Click overlay to close
     overlay.addEventListener('click', closePopup);
 
-    // Language options - use event delegation
-    mobileLangPopup.addEventListener('click', (e) => {
-      const option = e.target.closest('.mobile-lang-option');
-      if (option) {
+    // Language options - direct event listeners for better mobile support
+    const langOptions = mobileLangPopup.querySelectorAll('.mobile-lang-option');
+    langOptions.forEach(option => {
+      const handleSelect = (e) => {
+        e.preventDefault();
         e.stopPropagation();
+
         const lang = option.dataset.lang;
+        console.log('Language selected:', lang);
 
         // Switch language
         window.i18n.switchLanguage(lang);
 
         // Update active state
-        mobileLangPopup.querySelectorAll('.mobile-lang-option').forEach(opt => {
+        langOptions.forEach(opt => {
           opt.classList.toggle('active', opt.dataset.lang === lang);
         });
 
         updateMobileLangDisplay();
-        closePopup();
-      }
+
+        // Delay close slightly for visual feedback
+        setTimeout(closePopup, 100);
+      };
+
+      // Both click and touchend for better mobile support
+      option.addEventListener('click', handleSelect);
+      option.addEventListener('touchend', handleSelect);
     });
 
     // Initialize display
