@@ -1603,7 +1603,14 @@ button {
   }
 
   .language-switcher {
-    display: none;
+    display: flex;
+    gap: 2px;
+    padding: var(--space-1);
+  }
+
+  .language-switcher .lang-btn {
+    padding: var(--space-1) var(--space-2);
+    font-size: 10px;
   }
 
   .mobile-menu-btn {

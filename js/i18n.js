@@ -634,8 +634,8 @@ const industryStats = {
   OTHER: { zh: '其他', en: 'Other', ja: 'その他', ko: '기타', count: 50 }
 };
 
-// Current language
-let currentLang = 'zh';
+// Current language - default to English
+let currentLang = 'en';
 
 // Get translation
 function t(key) {
