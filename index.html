@@ -259,11 +259,11 @@
           <div class="form-row">
             <div class="form-group">
               <label for="mm-name" data-i18n="form.name">姓名 <span class="required">*</span></label>
-              <input type="text" id="mm-name" name="name" required placeholder="您的姓名">
+              <input type="text" id="mm-name" name="name" required placeholder="Your name" data-i18n-placeholder="placeholder.name">
             </div>
             <div class="form-group">
               <label for="mm-company" data-i18n="form.company">公司名稱 <span class="required">*</span></label>
-              <input type="text" id="mm-company" name="company" required placeholder="公司/品牌名稱">
+              <input type="text" id="mm-company" name="company" required placeholder="Company/Brand name" data-i18n-placeholder="placeholder.company">
             </div>
           </div>
 
@@ -273,9 +273,9 @@
               <select name="contactType" id="mm-contact-type" class="contact-type-select">
                 <option value="LINE">LINE</option>
                 <option value="WhatsApp">WhatsApp</option>
-                <option value="Phone">電話</option>
+                <option value="Phone" data-i18n="option.phone">Phone</option>
               </select>
-              <input type="text" id="mm-contact" name="contact" required placeholder="請輸入您的 ID 或號碼">
+              <input type="text" id="mm-contact" name="contact" required placeholder="Enter your ID or number" data-i18n-placeholder="placeholder.contact">
             </div>
           </div>
 
@@ -400,7 +400,7 @@
 
           <div class="form-group">
             <label for="mm-freetext" data-i18n="form.freeDescription">或直接描述您的需求</label>
-            <textarea id="mm-freetext" name="freeDescription" rows="3" placeholder="例如：我想找台北的咖啡豆供應商、我需要會日文的業務人才..."></textarea>
+            <textarea id="mm-freetext" name="freeDescription" rows="3" placeholder="e.g., Looking for coffee suppliers in Taipei, need Japanese-speaking sales talents..." data-i18n-placeholder="placeholder.freeDescription"></textarea>
           </div>
 
           <p class="form-hint" data-i18n="form.requirementHint">* 以上三項（需要的資源、想媒合的產業、自由描述）至少填寫一項</p>
@@ -527,35 +527,35 @@
             <div class="form-group">
               <label for="booth-industry" data-i18n="form.yourIndustry">產業類別 <span class="required">*</span></label>
               <select id="booth-industry" name="industry" required>
-                <option value="" data-i18n="form.selectIndustry">請選擇</option>
-                <option value="FOOD">餐飲服務</option>
-                <option value="TECH">科技資訊</option>
-                <option value="MANUFACTURING">製造業</option>
-                <option value="FINANCE">金融保險</option>
-                <option value="REAL_ESTATE">房地產</option>
-                <option value="RETAIL">零售批發</option>
-                <option value="MEDICAL">醫療健康</option>
-                <option value="EDUCATION">教育培訓</option>
-                <option value="MARKETING">行銷廣告</option>
-                <option value="LEGAL">法律會計</option>
-                <option value="LOGISTICS">物流運輸</option>
-                <option value="TOURISM">旅遊觀光</option>
-                <option value="CONSTRUCTION">建築工程</option>
-                <option value="BEAUTY">美容美髮</option>
-                <option value="PROFESSIONAL">專業服務</option>
-                <option value="OTHER">其他</option>
+                <option value="" data-i18n="form.selectIndustry">Please select</option>
+                <option value="FOOD" data-i18n="industry.food">Food & Beverage</option>
+                <option value="TECH" data-i18n="industry.tech">Technology</option>
+                <option value="MANUFACTURING" data-i18n="industry.manufacturing">Manufacturing</option>
+                <option value="FINANCE" data-i18n="industry.finance">Finance & Insurance</option>
+                <option value="REAL_ESTATE" data-i18n="industry.realEstate">Real Estate</option>
+                <option value="RETAIL" data-i18n="industry.retail">Retail & Wholesale</option>
+                <option value="MEDICAL" data-i18n="industry.medical">Healthcare</option>
+                <option value="EDUCATION" data-i18n="industry.education">Education</option>
+                <option value="MARKETING" data-i18n="industry.marketing">Marketing & Advertising</option>
+                <option value="LEGAL" data-i18n="industry.legal">Legal & Accounting</option>
+                <option value="LOGISTICS" data-i18n="industry.logistics">Logistics</option>
+                <option value="TOURISM" data-i18n="industry.tourism">Tourism</option>
+                <option value="CONSTRUCTION" data-i18n="industry.construction">Construction & Engineering</option>
+                <option value="BEAUTY" data-i18n="industry.beauty">Beauty & Wellness</option>
+                <option value="PROFESSIONAL" data-i18n="industry.professional">Professional Services</option>
+                <option value="OTHER" data-i18n="industry.other">Other</option>
               </select>
             </div>
           </div>
 
           <div class="form-group">
             <label for="booth-intro" data-i18n="form.companyIntro">公司簡介 <span class="required">*</span></label>
-            <textarea id="booth-intro" name="companyIntro" rows="3" required placeholder="請簡述您的公司業務..."></textarea>
+            <textarea id="booth-intro" name="companyIntro" rows="3" required placeholder="Brief description of your business..." data-i18n-placeholder="placeholder.companyIntro"></textarea>
           </div>
 
           <div class="form-group">
             <label for="booth-products" data-i18n="form.products">展示產品/服務 <span class="required">*</span></label>
-            <textarea id="booth-products" name="products" rows="3" required placeholder="請描述您想展示的產品或服務..."></textarea>
+            <textarea id="booth-products" name="products" rows="3" required placeholder="Describe the products or services you want to showcase..." data-i18n-placeholder="placeholder.products"></textarea>
           </div>
 
           <div class="form-row">
@@ -594,7 +594,7 @@
 
           <div class="form-group">
             <label for="booth-request" data-i18n="form.specialRequest">特殊需求（選填）</label>
-            <textarea id="booth-request" name="specialRequest" rows="2" placeholder="如有特殊需求請填寫..."></textarea>
+            <textarea id="booth-request" name="specialRequest" rows="2" placeholder="Any special requirements..." data-i18n-placeholder="placeholder.specialRequest"></textarea>
           </div>
 
           <div class="pricing-box">

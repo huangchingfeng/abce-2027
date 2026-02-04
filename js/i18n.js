@@ -152,6 +152,18 @@ const translations = {
     'footer.tagline': '第五屆亞洲商媒會',
     'footer.contact': '聯絡我們',
     'footer.quickLinks': '快速連結',
+
+    // Options
+    'option.phone': '電話',
+
+    // Placeholders
+    'placeholder.name': '您的姓名',
+    'placeholder.company': '公司/品牌名稱',
+    'placeholder.contact': '請輸入您的 ID 或號碼',
+    'placeholder.freeDescription': '例如：我想找台北的咖啡豆供應商、我需要會日文的業務人才...',
+    'placeholder.companyIntro': '請簡述您的公司業務...',
+    'placeholder.products': '請描述您想展示的產品或服務...',
+    'placeholder.specialRequest': '如有特殊需求請填寫...',
   },
 
   en: {
@@ -305,6 +317,18 @@ const translations = {
     'footer.tagline': '5th Asia Business Co-creation Expo',
     'footer.contact': 'Contact Us',
     'footer.quickLinks': 'Quick Links',
+
+    // Options
+    'option.phone': 'Phone',
+
+    // Placeholders
+    'placeholder.name': 'Your name',
+    'placeholder.company': 'Company/Brand name',
+    'placeholder.contact': 'Enter your ID or number',
+    'placeholder.freeDescription': 'e.g., Looking for coffee suppliers in Taipei, need Japanese-speaking sales talents...',
+    'placeholder.companyIntro': 'Brief description of your business...',
+    'placeholder.products': 'Describe the products or services you want to showcase...',
+    'placeholder.specialRequest': 'Any special requirements...',
   },
 
   ja: {
@@ -458,6 +482,18 @@ const translations = {
     'footer.tagline': '第5回アジアビジネス共創エキスポ',
     'footer.contact': 'お問い合わせ',
     'footer.quickLinks': 'クイックリンク',
+
+    // Options
+    'option.phone': '電話',
+
+    // Placeholders
+    'placeholder.name': 'お名前',
+    'placeholder.company': '会社名/ブランド名',
+    'placeholder.contact': 'IDまたは電話番号を入力',
+    'placeholder.freeDescription': '例：台北のコーヒー豆サプライヤーを探しています、日本語ができる営業人材が必要...',
+    'placeholder.companyIntro': '貴社の事業内容を簡単にご記入ください...',
+    'placeholder.products': '展示したい製品やサービスをご記入ください...',
+    'placeholder.specialRequest': '特別なご要望があればご記入ください...',
   },
 
   ko: {
@@ -611,6 +647,18 @@ const translations = {
     'footer.tagline': '제5회 아시아 비즈니스 공동창조 엑스포',
     'footer.contact': '문의하기',
     'footer.quickLinks': '빠른 링크',
+
+    // Options
+    'option.phone': '전화',
+
+    // Placeholders
+    'placeholder.name': '이름',
+    'placeholder.company': '회사/브랜드명',
+    'placeholder.contact': 'ID 또는 전화번호 입력',
+    'placeholder.freeDescription': '예: 타이베이의 커피 원두 공급업체를 찾고 있습니다, 일본어 가능한 영업 인재 필요...',
+    'placeholder.companyIntro': '귀사의 사업 내용을 간단히 기재해 주세요...',
+    'placeholder.products': '전시하고 싶은 제품이나 서비스를 기재해 주세요...',
+    'placeholder.specialRequest': '특별한 요청 사항이 있으면 기재해 주세요...',
   }
 };
 
