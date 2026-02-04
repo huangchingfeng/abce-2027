@@ -609,42 +609,42 @@ function generateCustomResponse(userData, resourceDB) {
       if (detail) {
         message = `您需要「${detail}」相關的供應商，我們有相關資源可以協助。`;
       } else {
-        message = '您需要供應商資源，ABCE 亞洲商媒會有超過 200 位供應商會員。';
+        message = '您需要供應商資源，ABCE 亞洲商媒會有超過 200 位供應商可供媒合。';
       }
     } else if (resourceNeeded.includes('BUYER')) {
       const detail = resourceDetails['BUYER'] || '';
       if (detail) {
         message = `您想找「${detail}」類型的客戶，這正是我們擅長的媒合領域。`;
       } else {
-        message = '您需要開發客戶，我們的會員涵蓋各產業的企業主，都是潛在的買家。';
+        message = '您需要開發客戶，商媒會參展者涵蓋各產業企業主，都是潛在的買家。';
       }
     } else if (resourceNeeded.includes('INVESTOR')) {
       const detail = resourceDetails['INVESTOR'] || '';
       if (detail) {
-        message = `您正在尋找「${detail}」，ABCE 會員中有相關的投資資源。`;
+        message = `您正在尋找「${detail}」，ABCE 商媒會中有相關的投資資源。`;
       } else {
-        message = '您需要投資人資源，我們有約 100 位具有投資能力或意願的會員。';
+        message = '您需要投資人資源，我們有約 100 位具有投資能力或意願的企業主。';
       }
     } else if (resourceNeeded.includes('PARTNER')) {
       const detail = resourceDetails['PARTNER'] || '';
       if (detail) {
         message = `您想找「${detail}」的合作夥伴，商媒會是建立合作關係的好地方。`;
       } else {
-        message = '您想找合作夥伴，ABCE 會員之間已促成許多策略聯盟。';
+        message = '您想找合作夥伴，ABCE 商媒會已促成許多策略聯盟。';
       }
     } else if (resourceNeeded.includes('CHANNEL')) {
       const detail = resourceDetails['CHANNEL'] || '';
       if (detail) {
-        message = `您需要「${detail}」通路資源，我們有經銷商、代理商會員可以媒合。`;
+        message = `您需要「${detail}」通路資源，我們有經銷商、代理商可以媒合。`;
       } else {
-        message = '您需要通路資源，ABCE 有約 180 位通路相關的會員。';
+        message = '您需要通路資源，ABCE 有約 180 位通路相關的企業主。';
       }
     } else if (resourceNeeded.includes('TALENT')) {
       const detail = resourceDetails['TALENT'] || '';
       if (detail) {
-        message = `您需要「${detail}」，透過會員網絡可以接觸到合適的人才資源。`;
+        message = `您需要「${detail}」，透過商媒會網絡可以接觸到合適的人才資源。`;
       } else {
-        message = '您需要人才資源，ABCE 會員網絡可協助您找到合適的人才。';
+        message = '您需要人才資源，ABCE 商媒會網絡可協助您找到合適的人才。';
       }
     } else {
       const detail = resourceDetails['OTHER'] || freeDescription || '';
@@ -783,7 +783,7 @@ function getBasicMatches(userData, resourceDB) {
           category: industry,
           count: resourceDB.industries[industry].count,
           relevance: 'high',
-          description: `${resourceDB.industries[industry].examples.join('、')}等相關會員`
+          description: `${resourceDB.industries[industry].examples.join('、')}等相關企業主`
         });
       }
     });

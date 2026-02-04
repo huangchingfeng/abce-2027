@@ -782,7 +782,7 @@ const translations = {
   }
 };
 
-// Industry stats for matching result (ABCE member data)
+// Industry stats for matching result (ABCE participant data)
 const industryStats = {
   FOOD: { zh: '餐飲食品', en: 'Food & Beverage', ja: '飲食関連', ko: '식음료 관련', count: 55 },
   TECH: { zh: '科技資訊', en: 'Technology', ja: 'テクノロジー', ko: '기술', count: 71 },
