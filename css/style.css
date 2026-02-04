@@ -221,6 +221,12 @@ button {
   margin-left: var(--space-1);
 }
 
+/* Logo Image (Header) */
+.logo-img {
+  height: 40px;
+  width: auto;
+}
+
 /* Navigation */
 .nav {
   display: flex;
@@ -561,6 +567,17 @@ button {
   font-size: var(--text-lg);
   font-weight: 500;
   color: var(--color-gold);
+}
+
+/* Hero Logo Image (Main Visual) */
+.hero-logo-wrapper {
+  margin-bottom: var(--space-8);
+}
+
+.hero-logo-img {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
 }
 
 /* Hero Title */
@@ -1555,6 +1572,14 @@ button {
   margin-bottom: var(--space-2);
 }
 
+/* Footer Logo Image */
+.footer-logo-img {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  margin-bottom: var(--space-4);
+}
+
 .footer-section h4 {
   font-size: var(--text-sm);
   font-weight: 600;
@@ -1754,6 +1779,19 @@ button {
 
   .mobile-menu-btn {
     display: flex;
+  }
+
+  /* Logo responsive */
+  .logo-img {
+    height: 32px;
+  }
+
+  .hero-logo-img {
+    max-width: 280px;
+  }
+
+  .footer-logo-img {
+    max-width: 160px;
   }
 
   .hero-content {
