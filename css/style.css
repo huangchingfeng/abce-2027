@@ -1602,15 +1602,82 @@ button {
     display: none;
   }
 
+  /* 手機版語言選單 - 下拉式設計 */
   .language-switcher {
+    position: relative;
     display: flex;
-    gap: 2px;
-    padding: var(--space-1);
+    flex-direction: column;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
   }
 
   .language-switcher .lang-btn {
-    padding: var(--space-1) var(--space-2);
-    font-size: 10px;
+    display: none;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    background: var(--color-bg-card);
+    border-radius: 0;
+    justify-content: center;
+    min-width: 100px;
+  }
+
+  .language-switcher .lang-btn.active {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+  }
+
+  /* 下拉箭頭 */
+  .language-switcher .lang-btn.active::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--color-text-secondary);
+    transition: var(--transition-fast);
+  }
+
+  /* 展開狀態 */
+  .language-switcher.open .lang-btn {
+    display: flex;
+    position: relative;
+    z-index: 100;
+  }
+
+  .language-switcher.open .lang-btn:not(.active) {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .language-switcher.open .lang-btn:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .language-switcher.open .lang-btn:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+  }
+
+  .language-switcher.open .lang-btn.active {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    border-bottom: none;
+  }
+
+  .language-switcher.open .lang-btn.active::after {
+    transform: rotate(180deg);
+  }
+
+  .language-switcher.open {
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translateY(-50%);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-md);
+    z-index: 1001;
   }
 
   .mobile-menu-btn {

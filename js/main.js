@@ -288,10 +288,41 @@ function initSmoothScroll() {
 
 // ===== Language Switcher =====
 function initLanguageSwitcher() {
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.i18n.switchLanguage(btn.dataset.lang);
+  const switchers = document.querySelectorAll('.header .language-switcher');
+
+  switchers.forEach(switcher => {
+    const buttons = switcher.querySelectorAll('.lang-btn');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+          // 手機版：點擊 active 按鈕展開/收起選單
+          if (btn.classList.contains('active') && !switcher.classList.contains('open')) {
+            e.preventDefault();
+            switcher.classList.add('open');
+            return;
+          }
+
+          // 選擇其他語言後收起選單
+          if (switcher.classList.contains('open')) {
+            switcher.classList.remove('open');
+          }
+        }
+
+        window.i18n.switchLanguage(btn.dataset.lang);
+      });
     });
+  });
+
+  // 點擊外部關閉下拉選單
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.language-switcher')) {
+      document.querySelectorAll('.language-switcher.open').forEach(s => {
+        s.classList.remove('open');
+      });
+    }
   });
 }
 
