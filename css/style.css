@@ -344,22 +344,15 @@ button {
   z-index: 2000;
   min-width: 280px;
   overflow: hidden;
-  animation: popupFadeIn 0.2s ease;
+  /* 防止模糊 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate(-50%, -50%) translateZ(0);
+  transform: translate(-50%, -50%) translateZ(0);
 }
 
 .mobile-lang-popup.active {
   display: block;
-}
-
-@keyframes popupFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
 }
 
 .mobile-lang-popup-header {
@@ -440,8 +433,7 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 1999;
 }
 
