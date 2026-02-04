@@ -156,6 +156,33 @@ const translations = {
     // Options
     'option.phone': '電話',
 
+    // Countries
+    'country.TW': '台灣',
+    'country.JP': '日本',
+    'country.KR': '韓國',
+    'country.MY': '馬來西亞',
+    'country.SG': '新加坡',
+    'country.TH': '泰國',
+    'country.PH': '菲律賓',
+    'country.VN': '越南',
+    'country.ID': '印尼',
+    'country.HK': '香港',
+    'country.CN': '中國',
+    'country.OTHER': '其他',
+
+    // Admin
+    'admin.login': '管理員登入',
+
+    // Gallery Alt
+    'gallery.alt1': '活動花絮 1',
+    'gallery.alt2': '活動花絮 2',
+    'gallery.alt3': '活動花絮 3',
+    'gallery.alt4': '活動花絮 4',
+    'gallery.alt5': '活動花絮 5',
+    'gallery.alt6': '活動花絮 6',
+    'gallery.alt7': '活動花絮 7',
+    'gallery.alt8': '活動花絮 8',
+
     // Placeholders
     'placeholder.name': '您的姓名',
     'placeholder.company': '公司/品牌名稱',
@@ -320,6 +347,33 @@ const translations = {
 
     // Options
     'option.phone': 'Phone',
+
+    // Countries
+    'country.TW': 'Taiwan',
+    'country.JP': 'Japan',
+    'country.KR': 'South Korea',
+    'country.MY': 'Malaysia',
+    'country.SG': 'Singapore',
+    'country.TH': 'Thailand',
+    'country.PH': 'Philippines',
+    'country.VN': 'Vietnam',
+    'country.ID': 'Indonesia',
+    'country.HK': 'Hong Kong',
+    'country.CN': 'China',
+    'country.OTHER': 'Other',
+
+    // Admin
+    'admin.login': 'Admin Login',
+
+    // Gallery Alt
+    'gallery.alt1': 'Event Gallery 1',
+    'gallery.alt2': 'Event Gallery 2',
+    'gallery.alt3': 'Event Gallery 3',
+    'gallery.alt4': 'Event Gallery 4',
+    'gallery.alt5': 'Event Gallery 5',
+    'gallery.alt6': 'Event Gallery 6',
+    'gallery.alt7': 'Event Gallery 7',
+    'gallery.alt8': 'Event Gallery 8',
 
     // Placeholders
     'placeholder.name': 'Your name',
@@ -486,6 +540,33 @@ const translations = {
     // Options
     'option.phone': '電話',
 
+    // Countries
+    'country.TW': '台湾',
+    'country.JP': '日本',
+    'country.KR': '韓国',
+    'country.MY': 'マレーシア',
+    'country.SG': 'シンガポール',
+    'country.TH': 'タイ',
+    'country.PH': 'フィリピン',
+    'country.VN': 'ベトナム',
+    'country.ID': 'インドネシア',
+    'country.HK': '香港',
+    'country.CN': '中国',
+    'country.OTHER': 'その他',
+
+    // Admin
+    'admin.login': '管理者ログイン',
+
+    // Gallery Alt
+    'gallery.alt1': 'イベントギャラリー 1',
+    'gallery.alt2': 'イベントギャラリー 2',
+    'gallery.alt3': 'イベントギャラリー 3',
+    'gallery.alt4': 'イベントギャラリー 4',
+    'gallery.alt5': 'イベントギャラリー 5',
+    'gallery.alt6': 'イベントギャラリー 6',
+    'gallery.alt7': 'イベントギャラリー 7',
+    'gallery.alt8': 'イベントギャラリー 8',
+
     // Placeholders
     'placeholder.name': 'お名前',
     'placeholder.company': '会社名/ブランド名',
@@ -651,6 +732,33 @@ const translations = {
     // Options
     'option.phone': '전화',
 
+    // Countries
+    'country.TW': '대만',
+    'country.JP': '일본',
+    'country.KR': '한국',
+    'country.MY': '말레이시아',
+    'country.SG': '싱가포르',
+    'country.TH': '태국',
+    'country.PH': '필리핀',
+    'country.VN': '베트남',
+    'country.ID': '인도네시아',
+    'country.HK': '홍콩',
+    'country.CN': '중국',
+    'country.OTHER': '기타',
+
+    // Admin
+    'admin.login': '관리자 로그인',
+
+    // Gallery Alt
+    'gallery.alt1': '이벤트 갤러리 1',
+    'gallery.alt2': '이벤트 갤러리 2',
+    'gallery.alt3': '이벤트 갤러리 3',
+    'gallery.alt4': '이벤트 갤러리 4',
+    'gallery.alt5': '이벤트 갤러리 5',
+    'gallery.alt6': '이벤트 갤러리 6',
+    'gallery.alt7': '이벤트 갤러리 7',
+    'gallery.alt8': '이벤트 갤러리 8',
+
     // Placeholders
     'placeholder.name': '이름',
     'placeholder.company': '회사/브랜드명',
@@ -720,6 +828,24 @@ function applyTranslations() {
     const translation = t(key);
     if (translation && translation !== key) {
       el.placeholder = translation;
+    }
+  });
+
+  // Apply alt translations
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    const key = el.getAttribute('data-i18n-alt');
+    const translation = t(key);
+    if (translation && translation !== key) {
+      el.alt = translation;
+    }
+  });
+
+  // Apply title translations
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    const translation = t(key);
+    if (translation && translation !== key) {
+      el.title = translation;
     }
   });
 
