@@ -305,6 +305,9 @@ function initLanguageSwitcher() {
   const mobileLangPopup = document.getElementById('mobileLangPopup');
 
   if (mobileLangBtn && mobileLangPopup) {
+    // Move popup to body to avoid z-index stacking context issues
+    document.body.appendChild(mobileLangPopup);
+
     // Create overlay if not exists
     let overlay = document.querySelector('.mobile-lang-overlay');
     if (!overlay) {
@@ -314,7 +317,8 @@ function initLanguageSwitcher() {
     }
 
     // Open popup
-    mobileLangBtn.addEventListener('click', () => {
+    mobileLangBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       mobileLangPopup.classList.add('active');
       overlay.classList.add('active');
     });
@@ -328,16 +332,23 @@ function initLanguageSwitcher() {
     // Close button
     const closeBtn = mobileLangPopup.querySelector('.mobile-lang-close');
     if (closeBtn) {
-      closeBtn.addEventListener('click', closePopup);
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopup();
+      });
     }
 
     // Click overlay to close
     overlay.addEventListener('click', closePopup);
 
-    // Language options
-    mobileLangPopup.querySelectorAll('.mobile-lang-option').forEach(option => {
-      option.addEventListener('click', () => {
+    // Language options - use event delegation
+    mobileLangPopup.addEventListener('click', (e) => {
+      const option = e.target.closest('.mobile-lang-option');
+      if (option) {
+        e.stopPropagation();
         const lang = option.dataset.lang;
+
+        // Switch language
         window.i18n.switchLanguage(lang);
 
         // Update active state
@@ -347,7 +358,7 @@ function initLanguageSwitcher() {
 
         updateMobileLangDisplay();
         closePopup();
-      });
+      }
     });
 
     // Initialize display
