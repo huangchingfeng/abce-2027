@@ -1,0 +1,45 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://abce.world; style-src 'unsafe-inline'; script-src 'sha256-Gkl2RRDdx//Rx+ptV7C61Ad1bI+XCRBwxDHGhsR3q34='; base-uri 'none'; form-action 'none'"><title>合作主辦報名看板｜2027 亞洲商媒會</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f6f7fc;color:#182046;font:16px/1.6 'Noto Sans TC',system-ui,sans-serif}header{background:#263f83;color:white;padding:15px max(6vw,22px);font-weight:650;letter-spacing:.04em}main{max-width:900px;margin:auto;padding:clamp(28px,6vw,72px) 20px}small,.muted{color:#505d76}h1{font-size:clamp(32px,7vw,56px);letter-spacing:-.04em;line-height:1.1;margin:8px 0}h2{font-size:23px;margin:0}h3{margin:0;font-size:20px}.eyebrow{font-size:13px;color:#225d69;font-weight:bold;letter-spacing:.12em}p{margin:.4rem 0}.band,article{background:white;border:1px solid #d7ddee;border-radius:16px;padding:clamp(18px,3vw,28px)}.band{margin:28px 0 22px;border-top:4px solid #3155a6;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.count{font-size:42px;font-weight:730;line-height:1.2}.unit{font-size:16px;margin-left:5px}button{background:#273f85;color:white;border:0;padding:11px 17px;border-radius:8px;font:inherit;cursor:pointer}button:disabled{opacity:.55}section{margin-top:22px}article{margin-top:12px;overflow-wrap:anywhere}.tag{display:inline-block;padding:2px 9px;background:#e2f2ec;color:#195b46;border-radius:6px;font-size:14px;margin-bottom:6px}dl{display:grid;grid-template-columns:max-content 1fr;gap:5px 15px;margin-bottom:0}dt{color:#58617c}dd{margin:0}footer{margin-top:30px;padding-top:12px;border-top:1px solid #d7ddee;color:#596078;font-size:14px}[hidden]{display:none!important}
+</style></head><body><header>亞洲商媒會 <span aria-hidden="true">/</span> ABCE 2027</header><main><div class="eyebrow">合作主辦專區</div><h1 id="title">報名看板</h1><p id="org" class="muted"></p><p id="msg" role="status" aria-live="polite">請從主辦單位提供的完整專屬連結開啟。</p><noscript>請開啟 JavaScript 以讀取報名資料。</noscript><div class="band" id="summary" hidden><div><small>累計已收件</small><div><span class="count" id="count"></span><span class="unit">筆</span></div></div><div><button id="reload" type="button">更新報名名單</button><p><small id="stamp"></small></p></div></div><section id="body" hidden><h2>報名名單</h2><p class="muted">依報名時間由新到舊排列。已收件表示表單已送達，錄取另行通知。</p><div id="list"></div></section><footer>僅供本場合作團隊辦理活動使用，請勿公開轉傳連結。</footer></main><script>
+'use strict';
+const events={capital:[7850,'Capital Pitch','華 Capital 分會'],channel:[7851,'通路選品會','精實國際行銷有限公司']};
+const $=id=>document.getElementById(id);
+let loading=false;
+function el(tag,value){const e=document.createElement(tag);e.textContent=value;return e}
+function readFields(raw){
+ const obj=Object.create(null);
+ const parts=[...raw.matchAll(/s:\d+:["“”″](\d+_[^";“”″]{1,300})["“”″];s:\d+:["“”″]([\s\S]*?)["“”″];(?=s:\d+:|\s*})/g)];
+ for(const m of parts)obj[m[1].replace(/^\d+_/,'')]=m[2];
+ if(!obj['公司／品牌名稱'])throw Error('format');
+ return obj;
+}
+function readRows(markup){
+ const tmp=document.createElement('template');tmp.innerHTML=markup;
+ const t=tmp.content.querySelector('table');if(!t)throw Error('format');
+ const heads=[...t.querySelectorAll('thead th')].map(e=>e.textContent.trim());
+ const pos=k=>heads.indexOf(k);if(pos('報名時間')<0||pos('報名資料')<0)throw Error('format');
+ const out=[];
+ for(const tr of t.querySelectorAll('tbody tr')){
+ const cells=[...tr.querySelectorAll('td')].map(e=>e.textContent.trim());if(cells.length===1&&/no (data|results|records)|無資料/i.test(cells[0]))continue;
+ const f=readFields(cells[pos('報名資料')]||'');const company=f['公司／品牌名稱'],person=(cells[pos('聯絡人')]||'').replace(/\s+(?:@|於|at|[-–—])\s*\d{4}-\d{2}-\d{2}.*$/i,'');
+ if(/系統測試|測試請勿安排|ABCE[-_\s]*(?:QA|TEST)\b/i.test(company+' '+person))continue;
+ out.push({company,person,date:cells[pos('報名時間')],role:f['參與身分'],status:f['本屆參展狀態']});
+ }
+ return out.sort((a,b)=>b.date.localeCompare(a.date));
+}
+function render(rows){
+ $('count').textContent=String(rows.length);const list=$('list');list.replaceChildren();
+ for(const r of rows){const a=el('article','');const badge=el('span','已收件');badge.className='tag';a.append(badge,el('h3',r.company));const dl=el('dl','');
+ for(const [k,v] of [['聯絡人',r.person],['參與身分',r.role],['本屆參展狀態',r.status],['報名時間',r.date]])if(v)dl.append(el('dt',k),el('dd',v));a.append(dl);list.append(a);}
+ if(!rows.length)list.append(el('article','目前還沒有正式報名。收到新報名後，更新名單就會看到。'));
+ $('summary').hidden=$('body').hidden=false;$('stamp').textContent='查詢時間 '+new Date().toLocaleTimeString('zh-TW',{timeZone:'Asia/Taipei',hour:'2-digit',minute:'2-digit',hour12:false})+'（台北）';
+}
+async function load(){
+ if(loading)return;const m=/^#(capital|channel)\.([A-Za-z0-9_-]{20})$/.exec(location.hash);if(!m)return;
+ const [id,title,org]=events[m[1]];$('title').textContent=title;$('org').textContent=org+'｜報名看板';loading=true;$('reload').disabled=true;$('msg').textContent='正在讀取本場報名資料…';
+ try{const r=await fetch('https://abce.world/wp-json/wp/v2/pages/'+id+'?_method=GET&_fields=content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:m[2]}),credentials:'omit',cache:'no-store',redirect:'error',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(16000)});
+ if(!r.ok)throw Error('network');const c=(await r.json()).content;if(!c?.protected||!c.rendered)throw Error('denied');render(readRows(c.rendered));$('msg').textContent='';
+ }catch(e){$('list').replaceChildren();$('summary').hidden=$('body').hidden=true;$('msg').textContent=e.message==='denied'?'此連結無法讀取本場名單，請向主辦單位索取最新連結。':'目前無法讀取名單，請稍後重新整理頁面。';}
+ finally{loading=false;$('reload').disabled=false;}}
+window.addEventListener('hashchange',()=>location.reload());$('reload').addEventListener('click',load);load();
+</script></body></html>
